@@ -1,0 +1,3 @@
+displayName = The Good, The Bad, and The Intoxicated
+author = Team Wishywashy
+version = 0.1
