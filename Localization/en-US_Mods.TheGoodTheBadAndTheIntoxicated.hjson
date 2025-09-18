@@ -2,12 +2,21 @@
 
 Items: {
 	SpaghettiWesternSword: {
-		DisplayName: "Spaghetti Western Sword"
+		DisplayName: Spaghetti Western Sword
 		Tooltip:
 			'''
 			Template of an item
 			Replacing this tooltip is duty 
 			It's snowing on Mt.Fuji
+			'''
+	}
+
+	BarMap: {
+		DisplayName: Bar Map
+		Tooltip:
+			'''
+			Map to a lost bar.
+			Brings you to The Tombstone Alehouse.
 			'''
 	}
 }
