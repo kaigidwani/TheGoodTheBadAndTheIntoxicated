@@ -5,18 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 using SubworldLibrary;
+using StructureHelper;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.WorldBuilding;
+using Terraria.DataStructures;
+using System.Diagnostics;
+using System.Drawing;
+using Microsoft.Xna.Framework;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
 	// Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
 	public class TheGoodTheBadAndTheIntoxicated : Mod
 	{
-
-	}
+        
+    }
 
     /// <summary>
     /// Initial setup of the Bar subworld.
@@ -64,9 +69,12 @@ namespace TheGoodTheBadAndTheIntoxicated
                     progress.Set((j + i * Main.maxTilesY) / (float)(Main.maxTilesX * Main.maxTilesY)); // Controls the progress bar, should only be set between 0f and 1f
                     Tile tile = Main.tile[i, j];
                     tile.HasTile = true;
-                    tile.TileType = TileID.Dirt;
+                    tile.TileType = TileID.ActiveStoneBlock;
                 }
             }
+
+            StructureHelper.API.Generator.GenerateStructure("Content/Structures/smiley", new Point16(0, 0), ModLoader.GetMod("TheGoodTheBadAndTheIntoxicated"));
+            
         }
     }
 }
