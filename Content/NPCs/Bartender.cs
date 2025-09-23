@@ -31,7 +31,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPC.knockBackResist = 0.5f;
             Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
             NPCID.Sets.ExtraFramesCount[NPC.type] = 0; // change this if we have any special attacks 
-            NPCID.Sets.AttackFrameCount[NPC.type] = 2; // for now, the NPC holds their weapon out when they attack
+            NPCID.Sets.AttackFrameCount[NPC.type] = 2; // the NPC holds their weapon out when they attack
             NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
             NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
             NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
@@ -60,9 +60,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         {
             return new List<string>()
             {
-                "Raging Alcoholic",
-                "Bill",
-                "John Drunkard"
+                "Willy",
+                "Billy",
+                "Bob"
             };
         }
 
@@ -102,13 +102,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             switch (Main.rand.Next(3))
             {
                 case 0:
-                    return "Im so drunk";
+                    return "Care for a drink?";
                 case 1:
-                    return "Cheers!";
+                    return "No skeletons in my basement!";
                 case 2:
-                    return "*barfs*";
+                    return "Welcome to my humble salloon!";
                 default:
-                    return "Next round's on me!";
+                    return "I got some vintage brews for ya!";
             }
         }
 
@@ -131,7 +131,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false); // drops a pistol on death
         }
     }
 }
