@@ -41,7 +41,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
-            // if any player has a wooden arrow in their inventory, the npc can spawn
+            // if any player has ale in their inventory, the npc can spawn
             for (var i = 0; i < 255; i++)
             {
                 Player player = Main.player[i];
@@ -99,14 +99,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         public override string GetChat()
         {
             NPC.FindFirstNPC(ModContent.NPCType<Bartender>());
-            switch (Main.rand.Next(3))
+            switch (Main.rand.Next(4))
             {
                 case 0:
                     return "Care for a drink?";
                 case 1:
                     return "No skeletons in my basement!";
                 case 2:
-                    return "Welcome to my humble salloon!";
+                    return "Welcome to my humble saloon!";
                 default:
                     return "I got some vintage brews for ya!";
             }
