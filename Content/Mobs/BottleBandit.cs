@@ -55,7 +55,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             // spawn in the overworld.
-            return 100.0f;
+            return SpawnCondition.OverworldDaySlime.Chance * 50.0f;
         }
 
         public override void AI()
