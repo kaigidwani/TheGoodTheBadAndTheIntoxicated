@@ -14,12 +14,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Raging Alcoholic");  DEPRICATED
+
         }
 
         public override void SetDefaults()
         {
-            NPC.townNPC = true; // they stay at the bar, should be false
+            NPC.townNPC = true; // they stay at the bar
             NPC.friendly = true; // they are chill
             NPC.width = 20; // standard width
             NPC.height = 20; // standard height
@@ -29,9 +29,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPC.HitSound = SoundID.NPCHit1; // basic npc hurt sound
             NPC.DeathSound = SoundID.NPCDeath1; // basic npc death sound
             NPC.knockBackResist = 0.5f;
-            Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 0; // change this if we have any special attacks 
-            NPCID.Sets.AttackFrameCount[NPC.type] = 2; // the NPC holds their weapon out when they attack
+            Main.npcFrameCount[NPC.type] = 24; // the number of frames of the NPC animation
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // change this if we have any special attacks 
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
             NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
             NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
             NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
