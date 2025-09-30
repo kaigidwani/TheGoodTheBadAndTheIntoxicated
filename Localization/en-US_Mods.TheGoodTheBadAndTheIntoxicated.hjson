@@ -36,4 +36,6 @@ NPCs: {
 
 		DisplayName: Bartender
 	}
+
+	BottleBandit.DisplayName: Bottle Bandit
 }
