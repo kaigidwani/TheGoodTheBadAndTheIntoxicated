@@ -86,7 +86,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                     progress.Set((j + i * Main.maxTilesY) / (float)(Main.maxTilesX * Main.maxTilesY)); // Controls the progress bar, should only be set between 0f and 1f
                     Tile tile = Main.tile[i, j];
                     tile.HasTile = true;
-                    tile.TileType = TileID.ActiveStoneBlock;
+                    tile.TileType = TileID.Sandstone;
                 }
             }
 
