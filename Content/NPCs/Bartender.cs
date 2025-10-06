@@ -32,10 +32,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             Main.npcFrameCount[NPC.type] = 24; // the number of frames of the NPC animation
             NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // change this if we have any special attacks 
             NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
-            NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
-            NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
-            NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
-            NPCID.Sets.AttackAverageChance[NPC.type] = 5; // the chance the NPC attacks when it is supposed to
+            //NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
+            //NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
+            //NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
+            //NPCID.Sets.AttackAverageChance[NPC.type] = 5; // the chance the NPC attacks when it is supposed to
             AnimationType = 22; // same animation cycle as the guide
         }
 
@@ -111,7 +111,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                     return "I got some vintage brews for ya!";
             }
         }
-
+        /*
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
             damage = 15;
@@ -128,6 +128,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         {
             multiplier = 50f; // fast bullet
         }
+        */
 
         public override void OnKill()
         {
