@@ -14,6 +14,7 @@ using Terraria.DataStructures;
 using System.Diagnostics;
 using System.Drawing;
 using Microsoft.Xna.Framework;
+using TheGoodTheBadAndTheIntoxicated.Content.NPCs;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
@@ -34,11 +35,13 @@ namespace TheGoodTheBadAndTheIntoxicated
         // honey blocks, respectively
         const ushort SURFACE_MARKER = TileID.BubblegumBlock; 
         const ushort SPAWNPOINT_MARKER = TileID.HoneyBlock;
+        const ushort BARTENDER_MARKER = TileID.Cloud;
 
         Mod _modRef;
         Point16 _dungeonDimensions;
         Point16 _dungeonOrigin;
         Dictionary<string, Point16> _poi;
+        Bartender _testNPC;
 
         public override int Width => 1000;
         public override int Height => 1000;
@@ -56,6 +59,7 @@ namespace TheGoodTheBadAndTheIntoxicated
             _modRef = ModLoader.GetMod("TheGoodTheBadAndTheIntoxicated");
             _dungeonDimensions = StructureHelper.API.Generator.GetStructureDimensions(DUNGEON_FILEPATH, _modRef);
             _poi = new Dictionary<string, Point16>();
+            _testNPC = null;
         }
 
         /// <summary>
@@ -74,6 +78,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                 _dungeonOrigin, _modRef);
 
             _poi = FindPOI();
+            
 
             // Spawning the structure in the correct location
             _dungeonOrigin = new Point16(Main.maxTilesX / 2,
@@ -82,11 +87,22 @@ namespace TheGoodTheBadAndTheIntoxicated
                _dungeonOrigin, _modRef);
 
             CleanUpMarkers();
-;
+
             // Changing the player's spawn location
             Main.spawnTileX = _dungeonOrigin.X + _poi["SPAWNPOINT_MARKER"].X;
             Main.spawnTileY = _dungeonOrigin.Y + _poi["SPAWNPOINT_MARKER"].Y;
             Main.LocalPlayer.Spawn(PlayerSpawnContext.SpawningIntoWorld);
+        }
+
+        public override void Update()
+        {
+            if (_testNPC == null)
+            {
+                Console.WriteLine("Spawned NPC");
+                _testNPC = new Bartender();
+
+                Console.WriteLine("aeadfadfgasuidf " + _testNPC);
+            }
         }
 
         /// <summary>
@@ -107,9 +123,24 @@ namespace TheGoodTheBadAndTheIntoxicated
                     Tile tile = Main.tile[x, y];
                     ushort type = tile.TileType;
 
-                    if (type == SURFACE_MARKER || type == SPAWNPOINT_MARKER)
+                    if (type == SURFACE_MARKER || type == SPAWNPOINT_MARKER || type == BARTENDER_MARKER)
                     {
-                        string key = tile.TileType == SURFACE_MARKER ? "SURFACE_MARKER" : "SPAWNPOINT_MARKER";
+                        string key = "";
+                        switch (type)
+                        {
+                            case SURFACE_MARKER:
+                                key = "SURFACE_MARKER";
+                                break;
+
+                            case SPAWNPOINT_MARKER:
+                                key = "SPAWNPOINT_MARKER";
+                                break;
+
+                            case BARTENDER_MARKER:
+                                key = "BARTENDER_MARKER";
+                                break;
+                        }
+
                         poi.Add(key, new Point16(x - _dungeonOrigin.X, y - _dungeonOrigin.Y));
                     }
 
