@@ -12,11 +12,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
     [AutoloadHead]
     public class Bartender : ModNPC
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             NPC.townNPC = true; // they stay at the bar
@@ -29,7 +24,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPC.HitSound = SoundID.NPCHit1; // basic npc hurt sound
             NPC.DeathSound = SoundID.NPCDeath1; // basic npc death sound
             NPC.knockBackResist = 0.5f;
-            Main.npcFrameCount[NPC.type] = 24; // the number of frames of the NPC animation
+            Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
             NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // change this if we have any special attacks 
             NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
             //NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
@@ -39,6 +34,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             AnimationType = 22; // same animation cycle as the guide
         }
 
+        /*
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
             // if any player has ale in their inventory, the npc can spawn
@@ -55,6 +51,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             }
             return false;
         }
+        */
 
         public override List<string> SetNPCNameList()
         {

@@ -13,11 +13,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
     [AutoloadHead]
     public class OldGunslinger : ModNPC
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             NPC.townNPC = true; // they come to the town
