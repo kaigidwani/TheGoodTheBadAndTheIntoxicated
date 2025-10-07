@@ -41,7 +41,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void AI()
         {
-            NPC.aiStyle = 5; // Flying AI
+            NPC.aiStyle = 51; // Plantera AI
         }
     }
 }
