@@ -1,19 +1,20 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using StructureHelper;
+using SubworldLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.ModLoader;
-using SubworldLibrary;
-using StructureHelper;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.IO;
+using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using Terraria.DataStructures;
-using System.Diagnostics;
-using System.Drawing;
-using Microsoft.Xna.Framework;
 using TheGoodTheBadAndTheIntoxicated.Content.NPCs;
 
 namespace TheGoodTheBadAndTheIntoxicated
@@ -33,7 +34,7 @@ namespace TheGoodTheBadAndTheIntoxicated
         const string DUNGEON_FILEPATH = "Content/Structures/DungeonMVP";
         // in TEdit, i'll have to mark the surface level and spawnpoints with bubblegum and
         // honey blocks, respectively
-        const ushort SURFACE_MARKER = TileID.BubblegumBlock; 
+        const ushort SURFACE_MARKER = TileID.BubblegumBlock;
         const ushort SPAWNPOINT_MARKER = TileID.HoneyBlock;
         const ushort BARTENDER_MARKER = TileID.Cloud;
 
@@ -72,13 +73,13 @@ namespace TheGoodTheBadAndTheIntoxicated
 
             // Generating a dummy dungeon to locate the exact spawnpoints and where the structure
             // needs to be placed to avoid manually inputting these values
-            _dungeonOrigin = new Point16(Main.maxTilesX / 2 - (_dungeonDimensions.X/2)
+            _dungeonOrigin = new Point16(Main.maxTilesX / 2 - (_dungeonDimensions.X / 2)
                 , Main.maxTilesY / 2);
             StructureHelper.API.Generator.GenerateStructure(DUNGEON_FILEPATH,
                 _dungeonOrigin, _modRef);
 
             _poi = FindPOI();
-            
+
 
             // Spawning the structure in the correct location
             _dungeonOrigin = new Point16(Main.maxTilesX / 2,
@@ -87,21 +88,46 @@ namespace TheGoodTheBadAndTheIntoxicated
                _dungeonOrigin, _modRef);
 
             CleanUpMarkers();
+            SpawnBartender(_poi["BARTENDER_MARKER"]);
 
             // Changing the player's spawn location
             Main.spawnTileX = _dungeonOrigin.X + _poi["SPAWNPOINT_MARKER"].X;
             Main.spawnTileY = _dungeonOrigin.Y + _poi["SPAWNPOINT_MARKER"].Y;
             Main.LocalPlayer.Spawn(PlayerSpawnContext.SpawningIntoWorld);
+
+
         }
 
-        public override void Update()
+        public override void OnUnload()
+        {
+            _testNPC = null;
+        }
+
+        /// <summary>
+        /// Spawns the bartender in the subworld at the given tile
+        /// </summary>
+        /// <param name="coords">Tile coordinates of where to spawn</param>
+        private void SpawnBartender(Point16 coords)
         {
             if (_testNPC == null)
             {
-                Console.WriteLine("Spawned NPC");
-                _testNPC = new Bartender();
+                Console.WriteLine("Spawned Bartender");
 
-                Console.WriteLine("aeadfadfgasuidf " + _testNPC);
+                // Proper code for spawning and referencing a new NPC in Terraria
+                int npcID = NPC.NewNPC(new EntitySource_Misc("BarSubworld"),
+                    (_dungeonOrigin.X + coords.X) * 16,
+                    (_dungeonOrigin.Y + coords.Y) * 16, ModContent.NPCType<Bartender>());
+
+                _testNPC = Main.npc[npcID].ModNPC as Bartender; // Reference spawned NPC
+
+                if (_testNPC != null)
+                {
+                    Console.WriteLine("NPC spawned successfully: " + _testNPC.Name);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to cast NPC to Bartender.");
+                }
             }
         }
 
@@ -112,10 +138,10 @@ namespace TheGoodTheBadAndTheIntoxicated
         /// Note: Since the points are relative to the dungeon's origin, all points
         ///       can be considered offsets.
         /// </returns>
-        private Dictionary<string,Point16> FindPOI()
+        private Dictionary<string, Point16> FindPOI()
         {
             Dictionary<string, Point16> poi = new Dictionary<string, Point16>();
-            
+
             for (int x = _dungeonOrigin.X; x < _dungeonOrigin.X + _dungeonDimensions.X; x++)
             {
                 for (int y = _dungeonOrigin.Y; y < _dungeonOrigin.Y + _dungeonDimensions.Y; y++)
@@ -123,24 +149,27 @@ namespace TheGoodTheBadAndTheIntoxicated
                     Tile tile = Main.tile[x, y];
                     ushort type = tile.TileType;
 
-                    if (type == SURFACE_MARKER || type == SPAWNPOINT_MARKER || type == BARTENDER_MARKER)
+                    string key = "";
+                    switch (type)
                     {
-                        string key = "";
-                        switch (type)
-                        {
-                            case SURFACE_MARKER:
-                                key = "SURFACE_MARKER";
-                                break;
+                        case SURFACE_MARKER:
+                            key = "SURFACE_MARKER";
+                            break;
 
-                            case SPAWNPOINT_MARKER:
-                                key = "SPAWNPOINT_MARKER";
-                                break;
+                        case SPAWNPOINT_MARKER:
+                            key = "SPAWNPOINT_MARKER";
+                            break;
 
-                            case BARTENDER_MARKER:
-                                key = "BARTENDER_MARKER";
-                                break;
-                        }
+                        case BARTENDER_MARKER:
+                            key = "BARTENDER_MARKER";
+                            break;
 
+                        default:
+                            break;
+                    }
+
+                    if (key != "")
+                    {
                         poi.Add(key, new Point16(x - _dungeonOrigin.X, y - _dungeonOrigin.Y));
                     }
 
@@ -161,7 +190,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                 Point16 markerLoc = new Point16(
                     _dungeonOrigin.X + key.Value.X,
                     _dungeonOrigin.Y + key.Value.Y);
-               
+
                 // Note that in TEdit, the marker has to be placed
                 // next to at least one tile that it should be replaced with
                 Point16 neighbor = Main.tile[markerLoc.X + 1, markerLoc.Y].HasTile
@@ -196,8 +225,8 @@ namespace TheGoodTheBadAndTheIntoxicated
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = "Generating terrain"; // Sets the text displayed for this pass
-            Main.worldSurface = Main.maxTilesY * 0.25; 
-            Main.rockLayer = Main.maxTilesY * 0.35; 
+            Main.worldSurface = Main.maxTilesY * 0.25;
+            Main.rockLayer = Main.maxTilesY * 0.35;
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
@@ -205,7 +234,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                     progress.Set((j + i * Main.maxTilesY) / (float)(Main.maxTilesX * Main.maxTilesY)); // Controls the progress bar, should only be set between 0f and 1f
 
                     Tile tile = Main.tile[i, j];
-                    
+
                     if (j >= Main.rockLayer)
                     {
                         tile.HasTile = true;
@@ -219,7 +248,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                 }
             }
 
-            
+
         }
     }
 }
