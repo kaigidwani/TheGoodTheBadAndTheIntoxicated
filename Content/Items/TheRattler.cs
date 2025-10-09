@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace TestingGrounds.Content.Items
+namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 {
     public class TheRattler : ModItem
     {

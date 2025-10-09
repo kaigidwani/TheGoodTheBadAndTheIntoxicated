@@ -67,4 +67,18 @@ NPCs: {
 		}
 	}
 	BottleBandit.DisplayName: Bottle Bandit
+	LeverAction: {
+		DisplayName: Lever Action
+		Tooltip: ""
+	}
+
+	TestGun: {
+		DisplayName: Test Gun
+		Tooltip: ""
+	}
+
+	TheRattler: {
+		DisplayName: The Rattler
+		Tooltip: ""
+	}
 }
