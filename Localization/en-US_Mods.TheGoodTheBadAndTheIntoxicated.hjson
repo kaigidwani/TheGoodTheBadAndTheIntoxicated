@@ -2,12 +2,27 @@
 
 Items: {
 	SpaghettiWesternSword: {
-		DisplayName: "Spaghetti Western Sword"
+		DisplayName: Spaghetti Western Sword
 		Tooltip:
 			'''
 			Template of an item
 			Replacing this tooltip is duty 
 			It's snowing on Mt.Fuji
 			'''
+	}
+
+	LeverAction: {
+		DisplayName: Lever Action
+		Tooltip: ""
+	}
+
+	TestGun: {
+		DisplayName: Test Gun
+		Tooltip: ""
+	}
+
+	TheRattler: {
+		DisplayName: The Rattler
+		Tooltip: ""
 	}
 }
