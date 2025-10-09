@@ -19,6 +19,21 @@ Items: {
 			Brings you to The Tombstone Alehouse.
 			'''
 	}
+
+	LeverAction: {
+		DisplayName: Lever Action
+		Tooltip: ""
+	}
+
+	TestGun: {
+		DisplayName: Test Gun
+		Tooltip: ""
+	}
+
+	TheRattler: {
+		DisplayName: The Rattler
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -66,7 +81,9 @@ NPCs: {
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
+
 	BottleBandit.DisplayName: Bottle Bandit
+
 	LeverAction: {
 		DisplayName: Lever Action
 		Tooltip: ""
