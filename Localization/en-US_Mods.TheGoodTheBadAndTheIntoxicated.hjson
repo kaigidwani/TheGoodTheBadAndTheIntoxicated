@@ -19,6 +19,21 @@ Items: {
 			Brings you to The Tombstone Alehouse.
 			'''
 	}
+
+	LeverAction: {
+		DisplayName: Lever Action
+		Tooltip: ""
+	}
+
+	TestGun: {
+		DisplayName: Test Gun
+		Tooltip: ""
+	}
+
+	TheRattler: {
+		DisplayName: The Rattler
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -38,4 +53,50 @@ NPCs: {
 	}
 
 	BossTest.DisplayName: Boss Test
+	Old_Gunslinger: {
+		DisplayName: Old_ Gunslinger
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	OldGunslinger: {
+		DisplayName: Old Gunslinger
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	BottleBandit.DisplayName: Bottle Bandit
+
+	LeverAction: {
+		DisplayName: Lever Action
+		Tooltip: ""
+	}
+
+	TestGun: {
+		DisplayName: Test Gun
+		Tooltip: ""
+	}
+
+	TheRattler: {
+		DisplayName: The Rattler
+		Tooltip: ""
+	}
 }
