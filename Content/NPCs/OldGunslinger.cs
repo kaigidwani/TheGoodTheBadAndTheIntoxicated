@@ -9,7 +9,7 @@ using TheGoodTheBadAndTheIntoxicated.Content.Items;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
-    //loads the head icon above the archer when they talk
+    // loads the head icon above the NPC when they talk
     [AutoloadHead]
     public class OldGunslinger : ModNPC
     {
