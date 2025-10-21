@@ -83,7 +83,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPCShop shop = new NPCShop(NPC.type, "Shop")
                 .Add(ItemID.SilverBullet)
                 .Add(ItemID.FlareGun)
-                .Add(ModContent.ItemType<BarMap>()); // sells the bar map
+                .Add(ModContent.ItemType<Trapdoor>()); // sells the bar map
 
             shop.Register();
         }
