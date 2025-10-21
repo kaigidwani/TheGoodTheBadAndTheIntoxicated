@@ -53,6 +53,7 @@ NPCs: {
 	}
 
 	BossTest.DisplayName: Boss Test
+
 	Old_Gunslinger: {
 		DisplayName: Old_ Gunslinger
 
@@ -100,3 +101,5 @@ NPCs: {
 		Tooltip: ""
 	}
 }
+
+Projectiles.BulletTest.DisplayName: Bullet Test
