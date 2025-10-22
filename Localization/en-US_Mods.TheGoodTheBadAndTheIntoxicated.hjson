@@ -39,6 +39,21 @@ Items: {
 		DisplayName: Broken Bottle
 		Tooltip: ""
 	}
+
+	Trapdoor: {
+		DisplayName: Trapdoor
+		Tooltip: ""
+	}
+
+	TrapdoorKey: {
+		Tooltip: ""
+		DisplayName: Trapdoor Key
+	}
+
+	SaloonTrapdoorKey: {
+		DisplayName: Saloon Trapdoor Key
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -103,4 +118,9 @@ NPCs: {
 		DisplayName: The Rattler
 		Tooltip: ""
 	}
+}
+
+Tiles: {
+	LockedTrapdoor.MapEntry: Locked Trapdoor
+	SaloonTrapdoor.MapEntry: Saloon Trapdoor
 }

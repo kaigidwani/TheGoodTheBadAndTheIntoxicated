@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using TheGoodTheBadAndTheIntoxicated.Content.Items;
+using TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
