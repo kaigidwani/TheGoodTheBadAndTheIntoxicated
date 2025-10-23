@@ -100,7 +100,7 @@ NPCs: {
 	}
 
 	BartenderTown: {
-		DisplayName: Bartender Town
+		DisplayName: Bartender
 
 		TownNPCMood: {
 			Content: I am content.
