@@ -109,18 +109,18 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ProjectileID.Bullet;
+            projType = ProjectileID.Ale; // he throws ale at enemies
             attackDelay = 1; // he got fast hands
         }
 
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
-            multiplier = 50f; // fast bullet
+            multiplier = 10f; // same velocity as the throwing glove ale projectile
         }
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false); // drops a pistol on death
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.Ale, 1, false, 0, false, false); // drops ale on death
         }
     }
 }

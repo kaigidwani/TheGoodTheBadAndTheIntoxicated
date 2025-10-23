@@ -82,7 +82,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         {
             NPCShop shop = new NPCShop(NPC.type, "Shop")
                 .Add(ItemID.SilverBullet)
-                .Add(ItemID.FlareGun)
+                .Add(ItemID.FlintlockPistol)
                 .Add(ModContent.ItemType<BarMap>()); // sells the bar map
 
             shop.Register();
@@ -119,12 +119,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
-            multiplier = 50f; // fast bullet
+            multiplier = 40f; // fast bullet
         }
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false); // drops a pistol on death
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.SilverBullet, 1, false, 0, false, false); // drops a silver bullet on death
         }
     }
 }

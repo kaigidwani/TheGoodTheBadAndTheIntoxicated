@@ -14,7 +14,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
     {
         public override void SetDefaults()
         {
-            NPC.townNPC = true; // they stay at the bar
+            NPC.townNPC = true; // they stay at the bar, but needs to be true so they can be traded with
             NPC.friendly = true; // they are chill
             NPC.width = 20; // standard width
             NPC.height = 20; // standard height
@@ -25,7 +25,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPC.DeathSound = SoundID.NPCDeath1; // basic npc death sound
             NPC.knockBackResist = 0.5f;
             Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // change this if we have any special attacks 
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // they have a greeting
             NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
             NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
             NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
@@ -92,7 +92,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false); // drops a pistol on death
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.Ale, 1, false, 0, false, false); // drops ale on death
         }
     }
 }
