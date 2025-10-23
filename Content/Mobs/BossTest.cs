@@ -24,11 +24,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         private static readonly Vector2 leftLeg_1 = new Vector2(-46f, -6f);
         private static readonly Vector2 rightLeg_1 = new Vector2(46f, -6f);
 
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             NPC.width = 100;
@@ -47,9 +42,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void AI()
         {
-            //NPC.aiStyle = 38; // Snowman AI
-
-
             // Sets the closest player as target. If null, skip the whole AI code.
             NPC.TargetClosest(true);
             if (!Main.player[NPC.target].active || Main.player[NPC.target].dead) return;

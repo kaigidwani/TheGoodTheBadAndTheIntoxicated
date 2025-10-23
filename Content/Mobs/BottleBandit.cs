@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -54,8 +55,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            // spawn in the overworld.
-            return SpawnCondition.OverworldDaySlime.Chance * 50.0f;
+            // Spawns in the underground if the player is.
+            if (spawnInfo.Player.ZoneDirtLayerHeight)
+            {
+                return 50f;
+            }
+
+            // If not, don't spawn it.
+            return 0f;
         }
 
         public override void AI()
