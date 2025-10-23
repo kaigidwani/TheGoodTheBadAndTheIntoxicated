@@ -13,10 +13,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 	{
         // The Display Name and Tooltip of this item can be edited in the 'Localization/en-US_Mods.TestDimensionMod.hjson' file.
 
-        // TODO: Change to be a custom sprite
-
-        public override string Texture => $"Terraria/Images/Item_{ItemID.PirateMap}"; // Copies the texture for the Ice Mirror, make your own texture if need be.
-
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.IceMirror); // Copies the defaults from the Ice Mirror.
