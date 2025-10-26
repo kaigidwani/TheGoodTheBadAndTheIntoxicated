@@ -15,9 +15,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture
     {
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<SaloonTrapdoor>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<SaloonTrapdoorClosed_Locked>());
             Item.width = 32;
-            Item.height = 48;
+            Item.height = 16;
             Item.value = 150;
         }
     }

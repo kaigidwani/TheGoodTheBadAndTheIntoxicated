@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture;
+using TheGoodTheBadAndTheIntoxicated.Content.Items;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
@@ -83,7 +83,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPCShop shop = new NPCShop(NPC.type, "Shop")
                 .Add(ItemID.SilverBullet)
                 .Add(ItemID.FlareGun)
-                .Add(ModContent.ItemType<Trapdoor>()); // sells the bar map
+                .Add(ModContent.ItemType<BarMap>()); // sells the bar map
 
             shop.Register();
         }

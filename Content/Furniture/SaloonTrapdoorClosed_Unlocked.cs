@@ -14,8 +14,8 @@ using TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Furniture
 {
-    public class SaloonTrapdoor : ModTile
-    { 
+    public class SaloonTrapdoorClosed_Unlocked : ModTile
+    {
 
         public override void SetStaticDefaults()
         {
@@ -43,39 +43,38 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Furniture
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<SaloonTrapdoorKey>();
+            player.cursorItemIconID = ModContent.ItemType<Trapdoor>();
         }
 
         public override bool RightClick(int i, int j)
         {
-            Player player = Main.LocalPlayer;
-            int keyType = ModContent.ItemType<SaloonTrapdoorKey>();
-
-            if (player.HasItem(keyType))
-            {
-                UnlockTrapdoor(i, j, keyType);
-            }
-            else
-            {
-                Main.NewText("Locked.", Color.Orange);
-                SoundEngine.PlaySound(SoundID.DoorClosed, new Vector2(i * 16, j * 16));
-            }
+            OpenTrapdoor(i, j);
 
             return true;
         }
 
-        public void UnlockTrapdoor(int i, int j, int keyType)
+        private void OpenTrapdoor(int i, int j)
         {
-            if (Main.LocalPlayer.ConsumeItem(keyType))
-            {
-                SoundEngine.PlaySound(SoundID.Unlock, new Vector2(i * 16, j * 16));
+            Point16 origin = GetTileOrigin(i, j);
+            int openType = ModContent.TileType<SaloonTrapdoorOpen>(); 
 
-                // TODO: FIND A WAY TO SWITCH THE TILE TO THE OPEN ONE
-                WorldGen.KillTile(i, j);
-                /*Tile tile = Framing.GetTileSafely(i, j);
-                tile.TileFrameX += 18; // adjust offset for your spritesheet
-                WorldGen.SquareTileFrame(i, j);*/
-            }
+            SoundEngine.PlaySound(SoundID.DoorOpen with { Pitch = 0.2f }, new Vector2(i * 16, j * 16));
+
+            // Replace tile
+            WorldGen.KillTile(origin.X, origin.Y);
+            WorldGen.KillTile(origin.X + 1, origin.Y);
+            WorldGen.PlaceTile(origin.X, origin.Y, openType, mute: true, forced: true);
+
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 2);
+        }
+
+        private Point16 GetTileOrigin(int i, int j)
+        {
+            Tile tile = Framing.GetTileSafely(i, j);
+            int originOffsetX =  i - (tile.TileFrameX / 16) % 2;
+            int originOffsetY =  j - (tile.TileFrameY / 16) % 2;
+            return new Point16(originOffsetX, originOffsetY);
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
@@ -85,7 +84,17 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Furniture
 
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
-            num = 1;
+            num = 0;
+        }
+
+        public override bool CanDrop(int i, int j)
+        {
+            return false;
+        }
+
+        public override bool KillSound(int i, int j, bool fail)
+        {
+            return false;
         }
     }
 }

@@ -123,4 +123,8 @@ NPCs: {
 Tiles: {
 	LockedTrapdoor.MapEntry: Locked Trapdoor
 	SaloonTrapdoor.MapEntry: Saloon Trapdoor
+	SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
+	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
+	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
+	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
 }
