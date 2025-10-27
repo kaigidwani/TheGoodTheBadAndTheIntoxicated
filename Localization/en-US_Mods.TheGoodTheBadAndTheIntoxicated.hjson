@@ -34,6 +34,11 @@ Items: {
 		DisplayName: The Rattler
 		Tooltip: ""
 	}
+
+	BrokenBottle: {
+		DisplayName: Broken Bottle
+		Tooltip: ""
+	}
 }
 
 NPCs: {
