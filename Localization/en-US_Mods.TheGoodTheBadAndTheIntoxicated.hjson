@@ -105,6 +105,8 @@ NPCs: {
 		DisplayName: The Rattler
 		Tooltip: ""
 	}
+
+	EightBallPaul.DisplayName: Eight Ball Paul
 }
 
 Projectiles.BulletTest.DisplayName: Bullet Test
