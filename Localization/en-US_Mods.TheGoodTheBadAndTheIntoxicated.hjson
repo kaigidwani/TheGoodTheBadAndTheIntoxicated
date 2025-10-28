@@ -39,6 +39,11 @@ Items: {
 		DisplayName: Broken Bottle
 		Tooltip: ""
 	}
+
+	Bounty: {
+		DisplayName: Bounty
+		Tooltip: ""
+	}
 }
 
 NPCs: {
