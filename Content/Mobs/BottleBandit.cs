@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using SubworldLibrary;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
@@ -55,13 +56,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            // Spawns in the underground if the player is.
-            if (spawnInfo.Player.ZoneDirtLayerHeight)
+            // This NPC spawns when the player is in mod subworld and underground.
+            if (spawnInfo.Player.ZoneDirtLayerHeight && SubworldSystem.IsActive<BarSubworld>())
             {
+                Console.WriteLine("Bottle Bandit spawned!");
                 return 50f;
             }
 
-            // If not, don't spawn it.
             return 0f;
         }
 

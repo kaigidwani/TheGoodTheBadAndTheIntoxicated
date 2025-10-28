@@ -13,6 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Audio;
+using SubworldLibrary;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
