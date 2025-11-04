@@ -39,6 +39,21 @@ Items: {
 		DisplayName: Broken Bottle
 		Tooltip: ""
 	}
+
+	Trapdoor: {
+		DisplayName: Trapdoor
+		Tooltip: ""
+	}
+
+	TrapdoorKey: {
+		Tooltip: ""
+		DisplayName: Trapdoor Key
+	}
+
+	SaloonTrapdoorKey: {
+		DisplayName: Saloon Trapdoor Key
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -118,4 +133,13 @@ NPCs: {
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
+}
+
+Tiles: {
+	LockedTrapdoor.MapEntry: Locked Trapdoor
+	SaloonTrapdoor.MapEntry: Saloon Trapdoor
+	SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
+	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
+	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
+	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
 }
