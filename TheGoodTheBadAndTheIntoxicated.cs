@@ -95,7 +95,6 @@ namespace TheGoodTheBadAndTheIntoxicated
             Main.spawnTileY = _dungeonOrigin.Y + _poi["SPAWNPOINT_MARKER"].Y;
             Main.LocalPlayer.Spawn(PlayerSpawnContext.SpawningIntoWorld);
 
-
         }
 
         public override void OnUnload()
@@ -226,7 +225,7 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             progress.Message = "Generating terrain"; // Sets the text displayed for this pass
             Main.worldSurface = Main.maxTilesY * 0.25;
-            Main.rockLayer = Main.maxTilesY * 0.35;
+            Main.rockLayer = Main.maxTilesY * 0.30;
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
