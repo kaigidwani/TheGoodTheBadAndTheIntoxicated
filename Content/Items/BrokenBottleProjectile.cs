@@ -6,8 +6,7 @@ using Terraria.ModLoader;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 { 
-	// This is a basic item template.
-	// Please see tModLoader's ExampleMod for every other example:
+	// Base of this item's code from Example Mod, check that out here:
 	// https://github.com/tModLoader/tModLoader/tree/stable/ExampleMod
 	public class BrokenBottleProjectile : ModProjectile
 	{	
@@ -84,18 +83,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 			DrawOriginOffsetX = 0;
 			DrawOffsetX = -(HalfSpriteWidth - HalfProjWidth);
 			DrawOriginOffsetY = -(HalfSpriteHeight - HalfProjHeight);
-
-			// Vanilla configuration for "hitbox towards the end"
-			//if (Projectile.spriteDirection == 1) {
-			//	DrawOriginOffsetX = -(HalfProjWidth - HalfSpriteWidth);
-			//	DrawOffsetX = (int)-DrawOriginOffsetX * 2;
-			//	DrawOriginOffsetY = 0;
-			//}
-			//else {
-			//	DrawOriginOffsetX = (HalfProjWidth - HalfSpriteWidth);
-			//	DrawOffsetX = 0;
-			//	DrawOriginOffsetY = 0;
-			//}
 		}
 
 		public override bool ShouldUpdatePosition() {
