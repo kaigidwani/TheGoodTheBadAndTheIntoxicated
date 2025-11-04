@@ -119,3 +119,5 @@ NPCs: {
 		}
 	}
 }
+
+Projectiles.BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
