@@ -31,7 +31,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         // Fields for NPC's web
         private bool _anchored;                 // Whether or not the NPC is anchored
         private Vector2 anchorPos;              // The position of anchor
-        private const float webLength = 200f;   // The length of the web
+        private float webLength = 200f;         // The length of the web
+        private static readonly float[] webLengths = new float[] { 150f, 200f, 250f, 300f, 350f };
+        private float targetWebLength;
+        private int swapTimer = 0;
         #endregion
 
         public override void SetDefaults()
@@ -73,6 +76,41 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             {
                 anchorPos = FindCeiling(NPC.Center);
                 _anchored = true;
+
+                // start at the web length of 200 and schedule a first swap
+                webLength = webLengths[1];
+                targetWebLength = webLength;
+                swapTimer = Main.rand.Next(240, 480);   // 4–8 seconds until next change
+            }
+
+            // Occasionally pick a different target length
+            if (--swapTimer <= 0)
+            {
+                // Get the index of current web length
+                int currentIndex = Array.IndexOf(webLengths, targetWebLength);
+                int i;
+
+                // Pick a different web length
+                do
+                {
+                    i = Main.rand.Next(webLengths.Length);
+                } while (i == currentIndex);
+                targetWebLength = webLengths[i];
+
+                swapTimer = Main.rand.Next(240, 480);   // 4–8 seconds until next change
+            }
+
+            float step = 2.5f;  // Speed of approaching
+            float diff = targetWebLength - webLength;
+
+            // Occasionally adjust the web length toward the target length
+            if (Math.Abs(diff) <= step)
+            {
+                webLength = targetWebLength;
+            }
+            else
+            {
+                webLength += Math.Sign(diff) * step;
             }
 
             // Hang position below the anchor

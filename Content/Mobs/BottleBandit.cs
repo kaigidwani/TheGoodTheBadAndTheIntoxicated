@@ -43,10 +43,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void SetDefaults()
         {
-            NPC.width = 40; // The width of the npc's hitbox (in pixels)
-            NPC.height = 44; // The height of the npc's hitbox (in pixels)
+            NPC.width = 48; // The width of the npc's hitbox (in pixels)
+            NPC.height = 50; // The height of the npc's hitbox (in pixels)
             NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
-            NPC.damage = 1; // The amount of damage that this npc deals
+            NPC.damage = 10; // The amount of damage that this npc deals
             NPC.defense = 4; // The amount of defense that this npc has
             NPC.lifeMax = 80; // The amount of health that this npc has
             NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
@@ -56,11 +56,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            // This NPC spawns when the player is in mod subworld and underground.
-            if (spawnInfo.Player.ZoneDirtLayerHeight && SubworldSystem.IsActive<BarSubworld>())
+            // This NPC spawns when the player is in the mod subworld and the spawn position is underground.
+            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY >= Main.worldSurface)
             {
                 Console.WriteLine("Bottle Bandit spawned!");
-                return 50f;
+                return 10f;
             }
 
             return 0f;
