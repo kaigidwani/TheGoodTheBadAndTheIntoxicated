@@ -109,3 +109,5 @@ NPCs: {
 		Tooltip: ""
 	}
 }
+
+Projectiles.BountyProjectile.DisplayName: Bounty Projectile
