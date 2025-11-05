@@ -143,3 +143,5 @@ Tiles: {
 	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
 	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
 }
+
+Projectiles.BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
