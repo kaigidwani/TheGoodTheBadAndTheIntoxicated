@@ -75,6 +75,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             return closest;
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            // Apply the debuff for 5 seconds (times 60 ticks)
+            target.AddBuff(ModContent.BuffType<Buffs.Marked>(), 5 * 60);
+        }
+
 
     }
 }
