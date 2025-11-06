@@ -12,7 +12,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Buffs
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
             // If an entity has the Marked debuff, they take more damage
-            if (npc.HasBuff(ModContent.BuffType<Buffs.Marked>()))
+            if (npc.HasBuff(ModContent.BuffType<Marked>()))
             {
                 modifiers.FinalDamage *= 2.0f; // +100% damage
             }
@@ -20,7 +20,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Buffs
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (npc.HasBuff(ModContent.BuffType<Buffs.Marked>()))
+            if (npc.HasBuff(ModContent.BuffType<Marked>()))
             {
                 // Make a red overlay
                 Texture2D texture = Terraria.GameContent.TextureAssets.Npc[npc.type].Value;

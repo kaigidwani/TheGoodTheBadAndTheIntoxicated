@@ -4,6 +4,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TheGoodTheBadAndTheIntoxicated.Content.Buffs;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 {
@@ -78,7 +79,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             // Apply the debuff for 5 seconds (times 60 ticks)
-            target.AddBuff(ModContent.BuffType<Buffs.Marked>(), 5 * 60);
+            target.AddBuff(ModContent.BuffType<Marked>(), 5 * 60);
         }
 
 
