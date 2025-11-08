@@ -111,3 +111,10 @@ NPCs: {
 }
 
 Projectiles.BountyProjectile.DisplayName: Bounty Projectile
+
+Buffs: {
+	Marked: {
+		DisplayName: Marked
+		Description: Mods.TheGoodTheBadAndTheIntoxicated.Buffs.Marked.Description
+	}
+}

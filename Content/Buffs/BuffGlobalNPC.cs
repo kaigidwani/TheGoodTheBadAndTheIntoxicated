@@ -22,20 +22,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Buffs
         {
             if (npc.HasBuff(ModContent.BuffType<Marked>()))
             {
-                // Make a red overlay
-                Texture2D texture = Terraria.GameContent.TextureAssets.Npc[npc.type].Value;
-                Color glowColor = new(180, 60, 50, 120); // reddish
-                spriteBatch.Draw(
-                    texture,
-                    npc.Center - screenPos, // the position of the enemy
-                    null,
-                    glowColor * 0.5f, // dim the glow color a bit
-                    npc.rotation, // account for enemy rotation
-                    texture.Size() / 2f, // the center of the sprite is the origin
-                    npc.scale * 1.05f, // slightly larger for glow outline
-                    npc.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                    0f
-                );
+                // enemy glows
+                Lighting.AddLight(npc.Center, 0.8f, 0.05f, 0.1f); 
             }
         }
     }
