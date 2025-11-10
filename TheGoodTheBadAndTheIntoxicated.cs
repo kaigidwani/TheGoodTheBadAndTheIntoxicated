@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using StructureHelper;
 using SubworldLibrary;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,13 +18,81 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using TheGoodTheBadAndTheIntoxicated.Content.NPCs;
 using TheGoodTheBadAndTheIntoxicated.Content.Furniture;
+using Microsoft.Build.Tasks;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
     // Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
     public class TheGoodTheBadAndTheIntoxicated : Mod
     {
+        //public override void
+    }
 
+    public class TheGoodTheBadAndTheIntoxicatedSystem : ModSystem
+    {
+        public override void OnWorldLoad()
+        {
+            // Making sure this only works on my building world
+            if (Main.worldName == "Dungeon Expansion")
+            {
+                // Deleting the old .shstruct files
+                string saloonFilepath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
+                    $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/Saloon.shstruct";
+
+                if (File.Exists(saloonFilepath))
+                {
+                    try
+                    {
+                        File.Delete(saloonFilepath);
+                    }
+                    catch (IOException ex)
+                    {
+                        Console.WriteLine($"An error occurred during file deletion: {ex.Message}");
+                    }
+                }
+
+                string dungeonFilePath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
+                    $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/Dungeon.shstruct";
+
+                if (File.Exists(dungeonFilePath))
+                {
+                    try
+                    {
+                        File.Delete(dungeonFilePath);
+                    }
+                    catch (IOException ex)
+                    {
+                        Console.WriteLine($"An error occurred during file deletion: {ex.Message}");
+                    }
+                }
+
+                string arenaFilepath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
+                    $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/BossArena.shstruct";
+
+                if (File.Exists(arenaFilepath))
+                {
+                    try
+                    {
+                        File.Delete(arenaFilepath);
+                    }
+                    catch (IOException ex)
+                    {
+                        Console.WriteLine($"An error occurred during file deletion: {ex.Message}");
+                    }
+                }
+
+                // Using coordinates from TEdit to automatically overwrite all saved structures,
+                // instead of doing it manually in game
+                StructureHelper.Models.StructureData saloonData = StructureHelper.API.Saver.SaveToStructureData(2029, 318, (2097 - 2029), (356-318));
+                StructureHelper.API.Saver.SaveToFile(saloonData, saloonFilepath.Replace(".shstruct", ""));
+
+                StructureHelper.Models.StructureData dungeonData = StructureHelper.API.Saver.SaveToStructureData(2042, 357, (2181 - 2042), (456 - 357));
+                StructureHelper.API.Saver.SaveToFile(dungeonData, dungeonFilePath.Replace(".shstruct", ""));
+            
+                StructureHelper.Models.StructureData bossArena = StructureHelper.API.Saver.SaveToStructureData(2158, 407, (2222 - 2158), (458 - 407));
+                StructureHelper.API.Saver.SaveToFile(bossArena, arenaFilepath.Replace(".shstruct", ""));
+            }
+        }
     }
 
     /// <summary>
@@ -39,6 +108,8 @@ namespace TheGoodTheBadAndTheIntoxicated
         const ushort SPAWNPOINT_MARKER = TileID.HoneyBlock;
         const ushort BARTENDER_MARKER = TileID.Cloud;
         const ushort TRAPDOOR_MARKER = TileID.FrozenSlimeBlock;
+
+        
 
         Mod _modRef;
         Point16 _dungeonDimensions;
