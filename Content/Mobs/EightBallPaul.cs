@@ -35,6 +35,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         private static readonly float[] webLengths = new float[] { 150f, 200f, 250f, 300f, 350f };
         private float targetWebLength;
         private int swapTimer = 0;
+
+        // Fields for swing physics
+        private float swingAngle = 0f;
+        private float swingSpeed = 0f;              // Angular velocity
+        private const float swingDamping = 0.97f;   // How fase it slows down per tick. 1f = no slowing.
         #endregion
 
         public override void SetDefaults()
@@ -113,17 +118,23 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 webLength += Math.Sign(diff) * step;
             }
 
+            // Swing physics
+            float lengthScale = 200f / webLength;                                   // Longer web = slower swing
+            swingSpeed += (-0.005f * lengthScale * (float)Math.Sin(swingAngle));    // gravity effect
+            swingAngle += swingSpeed;
+            swingSpeed *= swingDamping;
+
+            swingAngle = MathHelper.Clamp(swingAngle, -MathHelper.PiOver2, MathHelper.PiOver2);
+
+            Vector2 offset = new Vector2((float)Math.Sin(swingAngle), (float)Math.Cos(swingAngle)) * webLength;
+
             // Hang position below the anchor
-            Vector2 hangPos = anchorPos + new Vector2(0f, webLength);
+            Vector2 hangPos = anchorPos + offset;
 
             NPC.velocity = Vector2.Zero;    // Set to zero for now.
             NPC.position = hangPos - new Vector2(NPC.width * 0.5f, NPC.height * 0.5f);
 
 
-
-
-            // Direction to the nearest player
-            Vector2 toPlayer = (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitX);
 
             // Summon projectiles
             if (_rattlerCD <= 0)
@@ -131,8 +142,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 const int numProjectiles = 6;
                 for (int i = 0; i < numProjectiles; i++)
                 {
-                    Vector2 position = ToWorld(leftLeg_1) + toPlayer * 12f;
-                    Vector2 velocity = toPlayer * 7f;
+                    Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX);
+                    Vector2 spawnPos = NPC.Center + leftLeg_1 + 40f * shootDir;
+                    Vector2 velocity = shootDir * 7f;
 
                     // Rotate the velocity randomly by 30 degrees at max.
                     Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
@@ -140,26 +152,28 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     // Decrease velocity randomly for nicer visuals.
                     newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 
-                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), position, newVelocity, ProjectileID.MeteorShot, 20, 6.5f, Main.myPlayer);
+                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, newVelocity, ProjectileID.MeteorShot, 20, 6.5f, Main.myPlayer);
                     Main.projectile[id].friendly = false;
                     Main.projectile[id].hostile = true;
                     Main.projectile[id].npcProj = true;
 
-                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, position);
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
                 }
                 _rattlerCD = 60 * 3;
             }
             if (_leverCD <= 0)
             {
-                Vector2 position = ToWorld(rightLeg_1) + toPlayer * 12f;
+                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX);
+                Vector2 spawnPos = NPC.Center + rightLeg_1 + 20f * shootDir;
+                Vector2 velocity = shootDir * 8f;
 
-                int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), position, toPlayer * 8f, ProjectileID.VortexLaser, 28, 5f, Main.myPlayer);
+                int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, velocity, ProjectileID.VortexLaser, 28, 5f, Main.myPlayer);
                 Main.projectile[id].friendly = false;
                 Main.projectile[id].hostile = true;
                 Main.projectile[id].npcProj = true;
                 _leverCD = 45 * 3;
 
-                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, position);
+                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
             }
         }
 
@@ -192,15 +206,27 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         // Draw AFTER the NPC got drawn.
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Player target = Main.player[NPC.target];
-            Vector2 aimDir = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX);
+            Player player = Main.player[NPC.target];
 
             Texture2D rattlerTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value;
             Texture2D leverTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value;
 
             // Draw the guns aiming toward the player
-            DrawGun(spriteBatch, rattlerTex, ToWorld(leftLeg_1) - screenPos, aimDir);
-            DrawGun(spriteBatch, leverTex, ToWorld(rightLeg_1) - screenPos, aimDir);
+            DrawGun(spriteBatch, rattlerTex, NPC.Center + leftLeg_1 - screenPos, (player.Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, leverTex, NPC.Center + rightLeg_1 - screenPos, (player.Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX));
+        }
+
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            float dir = Math.Sign(player.Center.X - anchorPos.X);    // If hit on left, swing right, etc.
+            float lengthScale = 200f / webLength;                   // Longer web = slower swing
+            swingSpeed += -dir * 0.06f * lengthScale;
+        }
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            float dir = Math.Sign(projectile.Center.X - anchorPos.X);    // If hit on left, swing right, etc.
+            float lengthScale = 200f / webLength;                   // Longer web = slower swing
+            swingSpeed += -dir * 0.06f * lengthScale;
         }
 
 
@@ -228,23 +254,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             return new Vector2(tx * 16f + 8f, ty * 16f);
         }
 
-        /// <summary>
-        /// I use this function to convert local position from the spider's center into the world position.
-        /// </summary>
-        /// <param name="local">Local Vector2 position from NPC.Center</param>
-        /// <returns>The converted world position</returns>
-        private Vector2 ToWorld(Vector2 local)
-        {
-            float flip = (NPC.spriteDirection == -1) ? -1f : 1f;
-            var off = new Vector2(local.X * flip, local.Y);
-            return NPC.Center + off;
-        }
-
-        private static void DrawGun(SpriteBatch sb, Texture2D tex, Vector2 worldOnScreen, Vector2 aimDir)
+        private static void DrawGun(SpriteBatch spriteBatch, Texture2D tex, Vector2 worldOnScreen, Vector2 aimDir)
         {
             float rot = aimDir.ToRotation();
             var fx = (aimDir.X < 0f) ? SpriteEffects.FlipVertically : SpriteEffects.None; // simple flip
-            sb.Draw(tex, worldOnScreen, null, Color.White, rot, tex.Size() * 0.5f, 1f, fx, 0f);
+            spriteBatch.Draw(tex, worldOnScreen, null, Color.White, rot, tex.Size() * 0.5f, 1f, fx, 0f);
         }
     }
 }
