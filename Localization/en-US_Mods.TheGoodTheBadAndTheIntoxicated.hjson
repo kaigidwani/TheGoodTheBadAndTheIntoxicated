@@ -118,4 +118,6 @@ NPCs: {
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
+
+	NumberTwo.DisplayName: Number Two
 }
