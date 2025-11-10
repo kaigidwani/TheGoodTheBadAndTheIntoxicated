@@ -16,28 +16,51 @@ Items: {
 		Tooltip:
 			'''
 			Map to a lost bar.
-			Brings you to The Tombstone Alehouse.
+			Brings you to The Tombstone Taphouse.
 			'''
 	}
 
 	LeverAction: {
 		DisplayName: Lever Action
-		Tooltip: ""
+		Tooltip: 
+			'''
+			'Push and Pull.
+			Shoot to Kill.'
+			'''
 	}
 
-	TestGun: {
-		DisplayName: Test Gun
-		Tooltip: ""
+	SixShooter: {
+		DisplayName: Six Shooter
+		Tooltip: 
+			'''
+			'Spin the Wheel.
+			Seal the Deal.'
+			'''
 	}
 
 	TheRattler: {
 		DisplayName: The Rattler
-		Tooltip: ""
+		Tooltip: 
+			'''
+			'More Shells = More Fun.
+			Don't let the noise bother you.
+			Don't need to aim if the bullets bounce!'
+			'''
+	}
+
+	BoltAction: {
+		DisplayName: Bolt Action
+		Tooltip: 
+			...
+			'Rack the Bolt, Watch 'Em Fly'
 	}
 
 	BrokenBottle: {
 		DisplayName: Broken Bottle
-		Tooltip: ""
+		Tooltip: 
+			'''
+			'What you egg?!'
+			'''
 	}
 
 	Trapdoor: {
@@ -52,7 +75,11 @@ Items: {
 
 	SaloonTrapdoorKey: {
 		DisplayName: Saloon Trapdoor Key
-		Tooltip: ""
+		Tooltip: 
+			'''
+			A key with an 8-Ball at the top.
+			It must go to something nearby...
+			'''
 	}
 }
 
