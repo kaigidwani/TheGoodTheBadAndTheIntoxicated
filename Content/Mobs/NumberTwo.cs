@@ -40,7 +40,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void SetDefaults()
         {
-            NPC.width = 50; // The width of the npc's hitbox (in pixels)
+            NPC.width = 15; // The width of the npc's hitbox (in pixels)
             NPC.height = 50; // The height of the npc's hitbox (in pixels)
             NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
             NPC.damage = 1; // The amount of damage that this npc deals
@@ -156,7 +156,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     break;
                 case 2f:    // Firing
                     Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitX);
-                    Vector2 muzzle = new Vector2(NPC.Center.X + (12f * faceDir), NPC.Center.Y);
+                    Vector2 muzzle = new Vector2(NPC.Center.X + (20f * faceDir), NPC.Center.Y + 2f);
 
                     int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), muzzle, shootDir * 8f, ProjectileID.VortexLaser, 28, 5f, Main.myPlayer);
                     Main.projectile[id].friendly = false;
