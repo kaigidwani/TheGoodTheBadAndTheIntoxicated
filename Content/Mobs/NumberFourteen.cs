@@ -10,7 +10,7 @@ using Terraria.ModLoader.Utilities;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
-    internal class NumberTwo : ModNPC
+    internal class NumberFourteen : ModNPC
     {
         private enum ActionState
         {
@@ -19,14 +19,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             Attack
         }
 
-        private const float noticeRange = 1200.0f;
-        private const float attackRange = 600.0f;
+        private const float noticeRange = 700.0f;
+        private const float attackRange = 300.0f;
 
-        private const float walkSpeed = 0.9f;
-        private const float walkAccel = 0.06f;
-        private const int attackCD = 120;
+        private const float walkSpeed = 1.3f;
+        private const float walkAccel = 0.09f;
+        private const int attackCD = 90;
 
-        private const int frameCount = 13;
+        private const int frameCount = 15;
 
         public ref float AI_State => ref NPC.ai[0];
         public ref float AI_Timer => ref NPC.localAI[0];
@@ -44,7 +44,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.height = 50; // The height of the npc's hitbox (in pixels)
             NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
             NPC.damage = 3; // The amount of damage that this npc deals
-            NPC.defense = 2; // The amount of defense that this npc has
+            NPC.defense = 3; // The amount of defense that this npc has
             NPC.lifeMax = 60; // The amount of health that this npc has
             NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
             NPC.DeathSound = SoundID.NPCDeath1; // The sound the NPC will make when it dies.
@@ -96,7 +96,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             // we can enter the Attack state.
             if (Main.player[NPC.target].Distance(NPC.Center) < attackRange && AI_Timer <= 0.0f)
             {
-                    AI_State = (float)ActionState.Attack;
+                AI_State = (float)ActionState.Attack;
             }
             else
             {
@@ -128,8 +128,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         private void Attack()
         {
-            const int AimTime = 60;     // Aims for 1 second before firing
-            const int HoldTime = 30;    // Holds for 0.5 seconds after firing
+            const int AimTime = 45;     // Aims for 1 second before firing
+            const int HoldTime = 15;    // Holds for 0.5 seconds after firing
 
             if (NPC.localAI[1] == 0f)
             {
@@ -158,12 +158,21 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitX);
                     Vector2 muzzle = new Vector2(NPC.Center.X + (20f * faceDir), NPC.Center.Y + 2f);
 
-                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), muzzle, shootDir * 8f, ProjectileID.VortexLaser, 28, 5f, Main.myPlayer);
-                    Main.projectile[id].friendly = false;
-                    Main.projectile[id].hostile = true;
-                    Main.projectile[id].npcProj = true;
+                    float numProjectiles = 4 + Main.rand.Next(2); // 4-5 shots
+                    float rotation = MathHelper.ToRadians(5);
+                    Vector2 velocity = shootDir * 8f;
 
-                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, muzzle);
+                    for (int i = 0; i < numProjectiles; i++)
+                    {
+                        Vector2 newVelocity = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProjectiles - 1)));
+
+                        int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), muzzle, newVelocity, ProjectileID.VortexLaser, 15, 6f, Main.myPlayer);
+                        Main.projectile[id].friendly = false;
+                        Main.projectile[id].hostile = true;
+                        Main.projectile[id].npcProj = true;
+
+                        Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, muzzle);
+                    }
 
                     NPC.localAI[1] = 3f;
                     NPC.localAI[2] = HoldTime;
@@ -171,7 +180,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     break;
                 case 3f:    // Holding
                     NPC.localAI[2]--;
-                    
+
                     if (NPC.localAI[2] <= 0f)
                     {
                         // Reset state and attack cooldown and go back to Notice state
