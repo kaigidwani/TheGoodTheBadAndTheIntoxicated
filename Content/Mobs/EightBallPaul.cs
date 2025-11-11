@@ -39,7 +39,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         // Fields for swing physics
         private float swingAngle = 0f;
         private float swingSpeed = 0f;              // Angular velocity
-        private const float swingDamping = 0.97f;   // How fase it slows down per tick. 1f = no slowing.
+        private const float swingDamping = 0.97f;   // How fast it slows down (like air resistance). 1f = no slow down.
         #endregion
 
         public override void SetDefaults()
@@ -48,18 +48,17 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.height = 120;
             NPC.aiStyle = -1;
             NPC.damage = 10;
-            NPC.defense = 10;
+            NPC.defense = 88;
             NPC.lifeMax = 888;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 0.5f; // 1f is full knockback, 0f is zero knockback.
-            //NPC.noGravity = true;
-            //NPC.noTileCollide = true;
-            NPC.value = 1000.0f;
+            //NPC.knockBackResist = 0.5f; // 1f is full knockback, 0f is zero knockback.
+            NPC.value = 8888f;
         }
 
         public override void AI()
         {
+            // ---------- Common AI code ----------
             // Sets the closest player as target. If null, skip the whole AI code.
             NPC.TargetClosest(true);
             if (!Main.player[NPC.target].active || Main.player[NPC.target].dead) return;
@@ -76,6 +75,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
 
 
+            // ---------- Spider web & position AI code ----------
             // Find the first solid tile above
             if (!_anchored)
             {
@@ -119,30 +119,31 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             }
 
             // Swing physics
-            float lengthScale = 200f / webLength;                                   // Longer web = slower swing
-            swingSpeed += (-0.005f * lengthScale * (float)Math.Sin(swingAngle));    // gravity effect
-            swingAngle += swingSpeed;
-            swingSpeed *= swingDamping;
+            {
+                float lengthScale = 200f / webLength;                                   // Longer web length = slower swing
+                swingSpeed += (-0.005f * lengthScale * (float)Math.Sin(swingAngle));    // 0.005f is a gravity effect
+                swingAngle += swingSpeed;
+                swingSpeed *= swingDamping;
 
-            swingAngle = MathHelper.Clamp(swingAngle, -MathHelper.PiOver2, MathHelper.PiOver2);
+                swingAngle = MathHelper.Clamp(swingAngle, -MathHelper.PiOver2, MathHelper.PiOver2);
+            }
 
-            Vector2 offset = new Vector2((float)Math.Sin(swingAngle), (float)Math.Cos(swingAngle)) * webLength;
-
-            // Hang position below the anchor
-            Vector2 hangPos = anchorPos + offset;
-
-            NPC.velocity = Vector2.Zero;    // Set to zero for now.
-            NPC.position = hangPos - new Vector2(NPC.width * 0.5f, NPC.height * 0.5f);
-
+            // Calculate and update NPC position
+            Vector2 offset = new Vector2((float)Math.Sin(swingAngle), (float)Math.Cos(swingAngle)) * webLength; // Offset from anchor point
+            Vector2 hangPos = anchorPos + offset;                                                               // Convert to world position
+            NPC.velocity = Vector2.Zero;                                                                        // I'm setting position instead of applying velocity
+            NPC.position = hangPos - new Vector2(NPC.width * 0.5f, NPC.height * 0.5f);                          // FINALLY set position
 
 
+
+            // ---------- Weapon AI code ----------
             // Summon projectiles
             if (_rattlerCD <= 0)
             {
                 const int numProjectiles = 6;
                 for (int i = 0; i < numProjectiles; i++)
                 {
-                    Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX);
+                    Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX);  // Gun to player
                     Vector2 spawnPos = NPC.Center + leftLeg_1 + 40f * shootDir;
                     Vector2 velocity = shootDir * 7f;
 
@@ -218,15 +219,21 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
-            float dir = Math.Sign(player.Center.X - anchorPos.X);    // If hit on left, swing right, etc.
-            float lengthScale = 200f / webLength;                   // Longer web = slower swing
-            swingSpeed += -dir * 0.06f * lengthScale;
+            float dir = Math.Sign(player.Center.X - NPC.position.X);    // If hit on left, dir is -1, etc.
+            float lengthScale = 200f / webLength;                       // Longer web = slower swing
+
+            // dir is negaeted to swing away from hit source
+            // The more damage done, the stronger the swing
+            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * lengthScale;
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            float dir = Math.Sign(projectile.Center.X - anchorPos.X);    // If hit on left, swing right, etc.
-            float lengthScale = 200f / webLength;                   // Longer web = slower swing
-            swingSpeed += -dir * 0.06f * lengthScale;
+            float dir = Math.Sign(projectile.Center.X - NPC.position.X);    // If hit on left, dir is -1, etc.
+            float lengthScale = 200f / webLength;                           // Longer web = slower swing
+
+            // dir is negaeted to swing away from hit source
+            // The more damage done, the stronger the swing
+            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * lengthScale;
         }
 
 
