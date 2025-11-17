@@ -22,7 +22,7 @@ Items: {
 
 	LeverAction: {
 		DisplayName: Lever Action
-		Tooltip: 
+		Tooltip:
 			'''
 			'Push and Pull.
 			Shoot to Kill.'
@@ -31,7 +31,7 @@ Items: {
 
 	SixShooter: {
 		DisplayName: Six Shooter
-		Tooltip: 
+		Tooltip:
 			'''
 			'Spin the Wheel.
 			Seal the Deal.'
@@ -40,7 +40,7 @@ Items: {
 
 	TheRattler: {
 		DisplayName: The Rattler
-		Tooltip: 
+		Tooltip:
 			'''
 			'More Shells = More Fun.
 			Don't let the noise bother you.
@@ -50,17 +50,12 @@ Items: {
 
 	BoltAction: {
 		DisplayName: Bolt Action
-		Tooltip: 
-			...
-			'Rack the Bolt, Watch 'Em Fly'
+		Tooltip: "'Rack the Bolt, Watch 'Em Fly'"
 	}
 
 	BrokenBottle: {
 		DisplayName: Broken Bottle
-		Tooltip: 
-			'''
-			'What you egg?!'
-			'''
+		Tooltip: "'What you egg?!'"
 	}
 
 	Trapdoor: {
@@ -75,7 +70,7 @@ Items: {
 
 	SaloonTrapdoorKey: {
 		DisplayName: Saloon Trapdoor Key
-		Tooltip: 
+		Tooltip:
 			'''
 			A key with an 8-Ball at the top.
 			It must go to something nearby...
