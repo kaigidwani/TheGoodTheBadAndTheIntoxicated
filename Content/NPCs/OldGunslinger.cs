@@ -103,8 +103,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 index++;
             }
 
-            // gunslinger sells new guns when paul is defeated
-            if (BossSystem.paulDead)
+            // gunslinger sells new guns when paul is defeated (FOR NOW, IT CHECKS IF CITHULU IS DEAD)
+            if (NPC.downedBoss1) //BossSystem.paulDead
             {
                 items[index] = new Item();
                 items[index].SetDefaults(ModContent.ItemType<TheRattler>());
