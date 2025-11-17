@@ -23,10 +23,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         // Fields for weapons' cooldown
         private int _rattlerCD;
         private int _leverCD;
+        private int _boltCD;
 
         // Fields for weapons' position
-        private static readonly Vector2 leftLeg_1 = new Vector2(-70f, 0f);
-        private static readonly Vector2 rightLeg_1 = new Vector2(70f, 0f);
+        private static readonly Vector2 leftLeg_1 = new Vector2(-115f, 110f);
+        private static readonly Vector2 rightLeg_1 = new Vector2(115f, 110f);
+        private static readonly Vector2 leftLeg_2 = new Vector2(-120f, 70f);
+        private static readonly Vector2 rightLeg_2 = new Vector2(120f, 70f);
 
         // Fields for NPC's web
         private bool _anchored;                 // Whether or not the NPC is anchored
@@ -44,8 +47,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void SetDefaults()
         {
-            NPC.width = 148;
-            NPC.height = 120;
+            NPC.width = 200;
+            NPC.height = 350;
             NPC.aiStyle = -1;
             NPC.damage = 10;
             NPC.defense = 88;
@@ -71,6 +74,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             if (_leverCD > 0)
             {
                 _leverCD--;
+            }
+            if (_boltCD > 0)
+            {
+                _boltCD--;
             }
 
 
@@ -176,6 +183,28 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
                 Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
             }
+            if (_boltCD <= 0)
+            {
+                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_2).SafeNormalize(Vector2.UnitX);
+                Vector2 spawnPos = NPC.Center + leftLeg_2 + 20f * shootDir;
+
+                float numProjectiles = 4 + Main.rand.Next(2); // 4-5 shots
+                float rotation = MathHelper.ToRadians(5);
+                Vector2 velocity = shootDir * 8f;
+
+                for (int i = 0; i < numProjectiles; i++)
+                {
+                    Vector2 newVelocity = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProjectiles - 1)));
+
+                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, newVelocity, ProjectileID.VortexLaser, 15, 6f, Main.myPlayer);
+                    Main.projectile[id].friendly = false;
+                    Main.projectile[id].hostile = true;
+                    Main.projectile[id].npcProj = true;
+
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
+                }
+                _boltCD = 50 * 3;
+            }
         }
 
         // Draw BEFORE the normal NPC draw in vanilla code.
@@ -211,10 +240,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
             Texture2D rattlerTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value;
             Texture2D leverTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value;
+            Texture2D boltTex=  ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value;
 
             // Draw the guns aiming toward the player
             DrawGun(spriteBatch, rattlerTex, NPC.Center + leftLeg_1 - screenPos, (player.Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX));
             DrawGun(spriteBatch, leverTex, NPC.Center + rightLeg_1 - screenPos, (player.Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, boltTex, NPC.Center + leftLeg_2 - screenPos, (player.Center - NPC.Center - leftLeg_2).SafeNormalize(Vector2.UnitX));
         }
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
