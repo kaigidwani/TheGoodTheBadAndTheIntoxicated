@@ -66,23 +66,147 @@ Items: {
 	Bounty: {
 		DisplayName: Bounty
 		Tooltip: ""
-	TrapdoorKey: {
-		Tooltip: ""
-		DisplayName: Trapdoor Key
+
+		TrapdoorKey: {
+			Tooltip: ""
+			DisplayName: Trapdoor Key
+		}
+
+		SaloonTrapdoorKey: {
+			DisplayName: Saloon Trapdoor Key
+			Tooltip:
+				'''
+				A key with an 8-Ball at the top.
+				It must go to something nearby...
+				'''
+		}
+	}
+
+	NPCs: {
+		Bartender: {
+			TownNPCMood: {
+				Content: I am content.
+				NoHome: I hate not having a home.
+				FarFromHome: I am too far from home.
+				LoveSpace: I love having so much space.
+				DislikeCrowded: I dislike how crowded I am.
+				HateCrowded: I hate how crowded I am.
+				LikeNPC_Princess: I like {NPCName}.
+				Princess_LovesNPC: I like {NPCName}.
+			}
+
+			DisplayName: Bartender
+		}
+
+		Old_Gunslinger: {
+			DisplayName: Old_ Gunslinger
+
+			TownNPCMood: {
+				Content: I am content.
+				NoHome: I hate not having a home.
+				FarFromHome: I am too far from home.
+				LoveSpace: I love having so much space.
+				DislikeCrowded: I dislike how crowded I am.
+				HateCrowded: I hate how crowded I am.
+				LikeNPC_Princess: I like {NPCName}.
+				Princess_LovesNPC: I like {NPCName}.
+			}
+		}
+
+		OldGunslinger: {
+			DisplayName: Old Gunslinger
+
+			TownNPCMood: {
+				Content: I am content.
+				NoHome: I hate not having a home.
+				FarFromHome: I am too far from home.
+				LoveSpace: I love having so much space.
+				DislikeCrowded: I dislike how crowded I am.
+				HateCrowded: I hate how crowded I am.
+				LikeNPC_Princess: I like {NPCName}.
+				Princess_LovesNPC: I like {NPCName}.
+			}
+		}
+
+		BottleBandit.DisplayName: Bottle Bandit
+
+		LeverAction: {
+			DisplayName: Lever Action
+			Tooltip: ""
+		}
+
+		TestGun: {
+			DisplayName: Test Gun
+			Tooltip: ""
+		}
+
+		TheRattler: {
+			DisplayName: The Rattler
+			Tooltip: ""
+		}
+
+		BartenderTown: {
+			DisplayName: Bartender
+
+			TownNPCMood: {
+				Content: I am content.
+				NoHome: I hate not having a home.
+				FarFromHome: I am too far from home.
+				LoveSpace: I love having so much space.
+				DislikeCrowded: I dislike how crowded I am.
+				HateCrowded: I hate how crowded I am.
+				LikeNPC_Princess: I like {NPCName}.
+				Princess_LovesNPC: I like {NPCName}.
+			}
+		}
+	}
+
+	Projectiles: {
+		BountyProjectile.DisplayName: Bounty Projectile
+		BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
+	}
+
+	Buffs: {
+		Marked: {
+			DisplayName: Marked
+			Description: Mods.TheGoodTheBadAndTheIntoxicated.Buffs.Marked.Description
+		}
+	}
+
+	Tiles: {
+		LockedTrapdoor.MapEntry: Locked Trapdoor
+		SaloonTrapdoor.MapEntry: Saloon Trapdoor
+		SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
+		SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
+		SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
+		SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
 	}
 
 	SaloonTrapdoorKey: {
 		DisplayName: Saloon Trapdoor Key
-		Tooltip:
-			'''
-			A key with an 8-Ball at the top.
-			It must go to something nearby...
-			'''
+		Tooltip: ""
+	}
+}
+
+Tiles: {
+	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
+	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
+	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
+}
+
+Buffs: {
+	Marked: {
+		DisplayName: Marked
+		Description: Mods.TheGoodTheBadAndTheIntoxicated.Buffs.Marked.Description
 	}
 }
 
 NPCs: {
+	BottleBandit.DisplayName: Bottle Bandit
+
 	Bartender: {
+		DisplayName: Bartender
+
 		TownNPCMood: {
 			Content: I am content.
 			NoHome: I hate not having a home.
@@ -93,12 +217,10 @@ NPCs: {
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
-
-		DisplayName: Bartender
 	}
 
-	Old_Gunslinger: {
-		DisplayName: Old_ Gunslinger
+	BartenderTown: {
+		DisplayName: Bartender Town
 
 		TownNPCMood: {
 			Content: I am content.
@@ -126,55 +248,9 @@ NPCs: {
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
-
-	BottleBandit.DisplayName: Bottle Bandit
-
-	LeverAction: {
-		DisplayName: Lever Action
-		Tooltip: ""
-	}
-
-	TestGun: {
-		DisplayName: Test Gun
-		Tooltip: ""
-	}
-
-	TheRattler: {
-		DisplayName: The Rattler
-		Tooltip: ""
-	}
-
-	BartenderTown: {
-		DisplayName: Bartender
-
-		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
-			LikeNPC_Princess: I like {NPCName}.
-			Princess_LovesNPC: I like {NPCName}.
-		}
-	}
 }
 
-Projectiles.BountyProjectile.DisplayName: Bounty Projectile
-
-Buffs: {
-	Marked: {
-		DisplayName: Marked
-		Description: Mods.TheGoodTheBadAndTheIntoxicated.Buffs.Marked.Description
-	}
+Projectiles: {
+	BountyProjectile.DisplayName: Bounty Projectile
+	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
 }
-Tiles: {
-	LockedTrapdoor.MapEntry: Locked Trapdoor
-	SaloonTrapdoor.MapEntry: Saloon Trapdoor
-	SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
-	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
-	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
-	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
-}
-
-Projectiles.BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
