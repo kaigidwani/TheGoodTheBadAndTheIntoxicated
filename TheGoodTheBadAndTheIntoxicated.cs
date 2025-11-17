@@ -16,6 +16,7 @@ using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using TheGoodTheBadAndTheIntoxicated.Content.NPCs;
+using TheGoodTheBadAndTheIntoxicated.Content.Furniture;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
@@ -37,12 +38,13 @@ namespace TheGoodTheBadAndTheIntoxicated
         const ushort SURFACE_MARKER = TileID.BubblegumBlock;
         const ushort SPAWNPOINT_MARKER = TileID.HoneyBlock;
         const ushort BARTENDER_MARKER = TileID.Cloud;
+        const ushort TRAPDOOR_MARKER = TileID.FrozenSlimeBlock;
 
         Mod _modRef;
         Point16 _dungeonDimensions;
         Point16 _dungeonOrigin;
         Dictionary<string, Point16> _poi;
-        Bartender _testNPC;
+        Bartender _bartender;
 
         public override int Width => 1000;
         public override int Height => 1000;
@@ -60,7 +62,7 @@ namespace TheGoodTheBadAndTheIntoxicated
             _modRef = ModLoader.GetMod("TheGoodTheBadAndTheIntoxicated");
             _dungeonDimensions = StructureHelper.API.Generator.GetStructureDimensions(DUNGEON_FILEPATH, _modRef);
             _poi = new Dictionary<string, Point16>();
-            _testNPC = null;
+            _bartender = null;
         }
 
         /// <summary>
@@ -89,6 +91,7 @@ namespace TheGoodTheBadAndTheIntoxicated
 
             CleanUpMarkers();
             SpawnBartender(_poi["BARTENDER_MARKER"]);
+            PlaceTrapdoor(_poi["TRAPDOOR_MARKER"]);
 
             // Changing the player's spawn location
             Main.spawnTileX = _dungeonOrigin.X + _poi["SPAWNPOINT_MARKER"].X;
@@ -100,7 +103,7 @@ namespace TheGoodTheBadAndTheIntoxicated
 
         public override void OnUnload()
         {
-            _testNPC = null;
+            _bartender = null;
         }
 
         /// <summary>
@@ -109,26 +112,42 @@ namespace TheGoodTheBadAndTheIntoxicated
         /// <param name="coords">Tile coordinates of where to spawn</param>
         private void SpawnBartender(Point16 coords)
         {
-            if (_testNPC == null)
+            if (_bartender == null)
             {
-                Console.WriteLine("Spawned Bartender");
+                Console.WriteLine("Bartender coords: " + (_dungeonOrigin.X + coords.X) * 16 + ", " +
+                    (_dungeonOrigin.Y + coords.Y) * 16);
 
                 // Proper code for spawning and referencing a new NPC in Terraria
                 int npcID = NPC.NewNPC(new EntitySource_Misc("BarSubworld"),
                     (_dungeonOrigin.X + coords.X) * 16,
                     (_dungeonOrigin.Y + coords.Y) * 16, ModContent.NPCType<Bartender>());
 
-                _testNPC = Main.npc[npcID].ModNPC as Bartender; // Reference spawned NPC
+                _bartender = Main.npc[npcID].ModNPC as Bartender; // Reference spawned NPC
 
-                if (_testNPC != null)
+                if (_bartender != null)
                 {
-                    Console.WriteLine("NPC spawned successfully: " + _testNPC.Name);
+                    Console.WriteLine("NPC spawned successfully: " + _bartender.Name);
                 }
                 else
                 {
                     Console.WriteLine("Failed to cast NPC to Bartender.");
                 }
             }
+        }
+
+        /// <summary>
+        /// Places the trapdoor at the desired location
+        /// </summary>
+        /// <param name="coords">Tile coordinates of where to spawn</param>
+        private void PlaceTrapdoor(Point16 coords)
+        {
+            int lockedType = ModContent.TileType<SaloonTrapdoorClosed_Locked>();
+
+            int worldPosX = _dungeonOrigin.X + coords.X;
+            int worldPosY = _dungeonOrigin.Y + coords.Y;
+
+            WorldGen.KillTile(worldPosX, worldPosY); // Making sure there's nothing there to guarantee spawn
+            WorldGen.PlaceTile(worldPosX, worldPosY,lockedType, mute: true, forced: true);
         }
 
         /// <summary>
@@ -162,6 +181,10 @@ namespace TheGoodTheBadAndTheIntoxicated
 
                         case BARTENDER_MARKER:
                             key = "BARTENDER_MARKER";
+                            break;
+
+                        case TRAPDOOR_MARKER:
+                            key = "TRAPDOOR_MARKER";
                             break;
 
                         default:

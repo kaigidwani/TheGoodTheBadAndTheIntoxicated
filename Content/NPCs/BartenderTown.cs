@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -11,7 +11,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
     // loads the head icon above the NPC when they talk
     [AutoloadHead]
-    public class OldGunslinger : ModNPC
+    public class BartenderTown : ModNPC
     {
         public override void SetDefaults()
         {
@@ -37,17 +37,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
-            // if any player has bullets or a gun in their inventory, the npc can spawn
+            // if any player has the rattler in their inventory, the NPC can spawn
             for (var i = 0; i < 255; i++)
             {
                 Player player = Main.player[i];
-                foreach (Item item in player.inventory)
+                if (player.HasItem(ModContent.ItemType<TheRattler>()))
                 {
-                    // items that use bullets and bullets themselves cause the npc to spawn
-                    if (item.useAmmo == AmmoID.Bullet || item.ammo == AmmoID.Bullet)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -81,9 +77,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         public override void AddShops()
         {
             NPCShop shop = new NPCShop(NPC.type, "Shop")
-                .Add(ItemID.SilverBullet)
-                .Add(ItemID.FlintlockPistol)
-                .Add(ModContent.ItemType<BarMap>()); // sells the bar map
+                .Add(ItemID.Ale)
+                .Add(ItemID.Keg)
+                .Add(ItemID.AleThrowingGlove);
 
             shop.Register();
         }
@@ -95,13 +91,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             switch (Main.rand.Next(4))
             {
                 case 0:
-                    return "Interested in my wares?";
+                    return "Care for a drink?";
                 case 1:
-                    return "Nice gun you got there!  Want some more?";
+                    return "No hard feelings, right?";
                 case 2:
-                    return "My shooting days are over, but I can make sure yours are not!";
+                    return "The gig's up!";
                 default:
-                    return "(...could they be the one to take them down?)";
+                    return "I got some vintage brews for ya!";
             }
         }
 
@@ -113,18 +109,18 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ProjectileID.Bullet;
+            projType = ProjectileID.Ale; // he throws ale at enemies
             attackDelay = 1; // he got fast hands
         }
 
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
-            multiplier = 40f; // fast bullet
+            multiplier = 10f; // same velocity as the throwing glove ale projectile
         }
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.SilverBullet, 1, false, 0, false, false); // drops a silver bullet on death
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.Ale, 1, false, 0, false, false); // drops ale on death
         }
     }
 }

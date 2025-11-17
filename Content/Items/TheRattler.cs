@@ -17,13 +17,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.width = 65; // Hitbox width of the item.
             Item.height = 20; // Hitbox height of the item.
             Item.scale = 1f;
-            Item.rare = ItemRarityID.Orange; // The color that the item's name will be in-game.
+            Item.rare = ItemRarityID.LightRed; // The color that the item's name will be in-game.
 
             // Use Properties
             Item.useTime = 60; // The item's use time in ticks (60 ticks == 1 second.)
             Item.useAnimation = 60; // The length of the item's use animation in ticks (60 ticks == 1 second.)
             Item.useStyle = ItemUseStyleID.Shoot; // How you use the item (swinging, holding out, etc.)
-            Item.autoReuse = true; // Whether or not you can hold click to automatically use it again.
+            Item.autoReuse = false; // Whether or not you can hold click to automatically use it again.
 
             Item.UseSound = SoundID.Item36;
             // The sound that this item plays when used.
@@ -36,9 +36,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 
             // Weapon Properties
             Item.DamageType = DamageClass.Ranged; // Sets the damage type to ranged.
-            Item.damage = 20; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
+            Item.damage = 18; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
             Item.crit = 0;
-            Item.knockBack = 6.5f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
+            Item.knockBack = 5.5f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
             Item.noMelee = true; // So the item's animation doesn't do damage.
 
             // Gun Properties
@@ -64,7 +64,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            const int NumProjectiles = 6; // The number of projectiles that this gun will shoot.
+            const int NumProjectiles = 5; // The number of projectiles that this gun will shoot.
 
             for (int i = 0; i < NumProjectiles; i++)
             {
