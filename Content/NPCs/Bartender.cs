@@ -8,13 +8,13 @@ using Terraria.ModLoader;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
-    //loads the head icon above the archer when they talk
+    // loads the head icon above the NPC when they talk
     [AutoloadHead]
     public class Bartender : ModNPC
     {
         public override void SetDefaults()
         {
-            NPC.townNPC = true; // they stay at the bar
+            NPC.townNPC = true; // they stay at the bar, but needs to be true so they can be traded with
             NPC.friendly = true; // they are chill
             NPC.width = 20; // standard width
             NPC.height = 20; // standard height
@@ -25,33 +25,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPC.DeathSound = SoundID.NPCDeath1; // basic npc death sound
             NPC.knockBackResist = 0.5f;
             Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // change this if we have any special attacks 
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // they have a greeting
             NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
-            //NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
-            //NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
-            //NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
-            //NPCID.Sets.AttackAverageChance[NPC.type] = 5; // the chance the NPC attacks when it is supposed to
+            NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
+            NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
+            NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
+            NPCID.Sets.AttackAverageChance[NPC.type] = 5; // the chance the NPC attacks when it is supposed to
             AnimationType = 22; // same animation cycle as the guide
         }
-
-        /*
-        public override bool CanTownNPCSpawn(int numTownNPCs)
-        {
-            // if any player has ale in their inventory, the npc can spawn
-            for (var i = 0; i < 255; i++)
-            {
-                Player player = Main.player[i];
-                foreach (Item item in player.inventory)
-                {
-                    if (item.type == ItemID.Ale)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        */
 
         public override List<string> SetNPCNameList()
         {
@@ -108,28 +89,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                     return "I got some vintage brews for ya!";
             }
         }
-        /*
-        public override void TownNPCAttackStrength(ref int damage, ref float knockback)
-        {
-            damage = 15;
-            knockback = 2f;
-        }
-
-        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
-        {
-            projType = ProjectileID.Bullet;
-            attackDelay = 1; // he got fast hands
-        }
-
-        public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
-        {
-            multiplier = 50f; // fast bullet
-        }
-        */
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.FlintlockPistol, 1, false, 0, false, false); // drops a pistol on death
+            Item.NewItem(NPC.GetSource_Death(), NPC.getRect(), ItemID.Ale, 1, false, 0, false, false); // drops ale on death
         }
     }
 }
