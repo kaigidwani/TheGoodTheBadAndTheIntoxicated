@@ -24,6 +24,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         private int _rattlerCD;
         private int _leverCD;
         private int _boltCD;
+        private int _sixCD;
 
         // Fields for weapons' position
         private static readonly Vector2 leftLeg_1 = new Vector2(-115f, 110f);
@@ -55,7 +56,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.lifeMax = 888;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
-            //NPC.knockBackResist = 0.5f; // 1f is full knockback, 0f is zero knockback.
             NPC.value = 8888f;
         }
 
@@ -78,6 +78,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             if (_boltCD > 0)
             {
                 _boltCD--;
+            }
+            if (_sixCD > 0)
+            {
+                _sixCD--;
             }
 
 
@@ -205,6 +209,20 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 }
                 _boltCD = 50 * 3;
             }
+            if (_sixCD <= 0)
+            {
+                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - rightLeg_2).SafeNormalize(Vector2.UnitX);
+                Vector2 spawnPos = NPC.Center + rightLeg_2 + 20f * shootDir;
+                Vector2 velocity = shootDir * 16f;
+
+                int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, velocity, ProjectileID.BulletDeadeye, 14, 4f, Main.myPlayer);
+                Main.projectile[id].friendly = false;
+                Main.projectile[id].hostile = true;
+                Main.projectile[id].npcProj = true;
+                _sixCD = 25 * 3;
+
+                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
+            }
         }
 
         // Draw BEFORE the normal NPC draw in vanilla code.
@@ -240,12 +258,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
             Texture2D rattlerTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value;
             Texture2D leverTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value;
-            Texture2D boltTex=  ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value;
+            Texture2D boltTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value;
+            Texture2D sixTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/SixShooter").Value;
 
             // Draw the guns aiming toward the player
             DrawGun(spriteBatch, rattlerTex, NPC.Center + leftLeg_1 - screenPos, (player.Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX));
             DrawGun(spriteBatch, leverTex, NPC.Center + rightLeg_1 - screenPos, (player.Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX));
             DrawGun(spriteBatch, boltTex, NPC.Center + leftLeg_2 - screenPos, (player.Center - NPC.Center - leftLeg_2).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, sixTex, NPC.Center + rightLeg_2 - screenPos, (player.Center - NPC.Center - rightLeg_2).SafeNormalize(Vector2.UnitX));
         }
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
