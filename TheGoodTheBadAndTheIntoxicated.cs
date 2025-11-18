@@ -39,6 +39,9 @@ namespace TheGoodTheBadAndTheIntoxicated
                 string saloonFilepath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
                     $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/Saloon.shstruct";
 
+                string dungeonFilePath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
+                    $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/Dungeon.shstruct";
+
                 if (File.Exists(saloonFilepath))
                 {
                     try
@@ -50,9 +53,6 @@ namespace TheGoodTheBadAndTheIntoxicated
                         Console.WriteLine($"An error occurred during file deletion: {ex.Message}");
                     }
                 }
-
-                string dungeonFilePath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
-                    $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/Dungeon.shstruct";
 
                 if (File.Exists(dungeonFilePath))
                 {
@@ -66,7 +66,8 @@ namespace TheGoodTheBadAndTheIntoxicated
                     }
                 }
 
-                string arenaFilepath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
+                // Not sure if we need a seperate structure for the arena and the dungeon if the boss isn't always there
+                /*string arenaFilepath = $"{ModLoader.ModPath.Replace("Mods", "ModSources")}/" +
                     $"{nameof(TheGoodTheBadAndTheIntoxicated)}/Content/Structures/BossArena.shstruct";
 
                 if (File.Exists(arenaFilepath))
@@ -79,18 +80,19 @@ namespace TheGoodTheBadAndTheIntoxicated
                     {
                         Console.WriteLine($"An error occurred during file deletion: {ex.Message}");
                     }
-                }
+                }*/
 
                 // Using coordinates from TEdit to automatically overwrite all saved structures,
                 // instead of doing it manually in game
-                StructureHelper.Models.StructureData saloonData = StructureHelper.API.Saver.SaveToStructureData(2029, 318, (2097 - 2029), (356-318));
+                StructureHelper.Models.StructureData saloonData = StructureHelper.API.Saver.SaveToStructureData(2029, 318, (2097 - 2029), (358-318));
                 StructureHelper.API.Saver.SaveToFile(saloonData, saloonFilepath.Replace(".shstruct", ""));
 
-                StructureHelper.Models.StructureData dungeonData = StructureHelper.API.Saver.SaveToStructureData(2042, 357, (2181 - 2042), (456 - 357));
+                StructureHelper.Models.StructureData dungeonData = StructureHelper.API.Saver.SaveToStructureData(2042, 357, (2222 - 2042), (459 - 357));
                 StructureHelper.API.Saver.SaveToFile(dungeonData, dungeonFilePath.Replace(".shstruct", ""));
-            
-                StructureHelper.Models.StructureData bossArena = StructureHelper.API.Saver.SaveToStructureData(2158, 407, (2222 - 2158), (458 - 407));
-                StructureHelper.API.Saver.SaveToFile(bossArena, arenaFilepath.Replace(".shstruct", ""));
+
+                Console.WriteLine("updated the files");
+                /*StructureHelper.Models.StructureData bossArena = StructureHelper.API.Saver.SaveToStructureData(2158, 407, (2222 - 2158), (458 - 407));
+                StructureHelper.API.Saver.SaveToFile(bossArena, arenaFilepath.Replace(".shstruct", ""));*/
             }
         }
     }
@@ -101,7 +103,9 @@ namespace TheGoodTheBadAndTheIntoxicated
     /// </summary>
 	public class BarSubworld : Subworld
     {
-        const string DUNGEON_FILEPATH = "Content/Structures/DungeonMVP";
+        const string DUNGEON_FILEPATH = "Content/Structures/Dungeon";
+        const string SALOON_FILEPATH = "Content/Structures/Saloon";
+
         // in TEdit, i'll have to mark the surface level and spawnpoints with bubblegum and
         // honey blocks, respectively
         const ushort SURFACE_MARKER = TileID.BubblegumBlock;
@@ -112,8 +116,8 @@ namespace TheGoodTheBadAndTheIntoxicated
         
 
         Mod _modRef;
-        Point16 _dungeonDimensions;
-        Point16 _dungeonOrigin;
+        Point16 _saloonDimensions;
+        Point16 _saloonOrigin;
         Dictionary<string, Point16> _poi;
         Bartender _bartender;
 
@@ -131,7 +135,7 @@ namespace TheGoodTheBadAndTheIntoxicated
         public BarSubworld() : base()
         {
             _modRef = ModLoader.GetMod("TheGoodTheBadAndTheIntoxicated");
-            _dungeonDimensions = StructureHelper.API.Generator.GetStructureDimensions(DUNGEON_FILEPATH, _modRef);
+            _saloonDimensions = StructureHelper.API.Generator.GetStructureDimensions(SALOON_FILEPATH, _modRef);
             _poi = new Dictionary<string, Point16>();
             _bartender = null;
         }
@@ -146,27 +150,32 @@ namespace TheGoodTheBadAndTheIntoxicated
 
             // Generating a dummy dungeon to locate the exact spawnpoints and where the structure
             // needs to be placed to avoid manually inputting these values
-            _dungeonOrigin = new Point16(Main.maxTilesX / 2 - (_dungeonDimensions.X / 2)
+            _saloonOrigin = new Point16(Main.maxTilesX / 2 - (_saloonDimensions.X / 2)
                 , Main.maxTilesY / 2);
-            StructureHelper.API.Generator.GenerateStructure(DUNGEON_FILEPATH,
-                _dungeonOrigin, _modRef);
+            StructureHelper.API.Generator.GenerateStructure(SALOON_FILEPATH,
+                _saloonOrigin, _modRef);
 
             _poi = FindPOI();
 
 
             // Spawning the structure in the correct location
-            _dungeonOrigin = new Point16(Main.maxTilesX / 2,
+            _saloonOrigin = new Point16(Main.maxTilesX / 2,
                 (int)Main.worldSurface - _poi["SURFACE_MARKER"].Y);
+            StructureHelper.API.Generator.GenerateStructure(SALOON_FILEPATH,
+               _saloonOrigin, _modRef);
+
+            // hard coded to make my life easier for now
+            Point16 dungeonOrigin = new Point16(_saloonOrigin.X + 13, _saloonOrigin.Y + _saloonDimensions.Y);
             StructureHelper.API.Generator.GenerateStructure(DUNGEON_FILEPATH,
-               _dungeonOrigin, _modRef);
+             dungeonOrigin, _modRef);
 
             CleanUpMarkers();
             SpawnBartender(_poi["BARTENDER_MARKER"]);
             PlaceTrapdoor(_poi["TRAPDOOR_MARKER"]);
 
             // Changing the player's spawn location
-            Main.spawnTileX = _dungeonOrigin.X + _poi["SPAWNPOINT_MARKER"].X;
-            Main.spawnTileY = _dungeonOrigin.Y + _poi["SPAWNPOINT_MARKER"].Y;
+            Main.spawnTileX = _saloonOrigin.X + _poi["SPAWNPOINT_MARKER"].X;
+            Main.spawnTileY = _saloonOrigin.Y + _poi["SPAWNPOINT_MARKER"].Y;
             Main.LocalPlayer.Spawn(PlayerSpawnContext.SpawningIntoWorld);
 
         }
@@ -184,13 +193,13 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             if (_bartender == null)
             {
-                Console.WriteLine("Bartender coords: " + (_dungeonOrigin.X + coords.X) * 16 + ", " +
-                    (_dungeonOrigin.Y + coords.Y) * 16);
+                Console.WriteLine("Bartender coords: " + (_saloonOrigin.X + coords.X) * 16 + ", " +
+                    (_saloonOrigin.Y + coords.Y) * 16);
 
                 // Proper code for spawning and referencing a new NPC in Terraria
                 int npcID = NPC.NewNPC(new EntitySource_Misc("BarSubworld"),
-                    (_dungeonOrigin.X + coords.X) * 16,
-                    (_dungeonOrigin.Y + coords.Y) * 16, ModContent.NPCType<Bartender>());
+                    (_saloonOrigin.X + coords.X) * 16,
+                    (_saloonOrigin.Y + coords.Y) * 16, ModContent.NPCType<Bartender>());
 
                 _bartender = Main.npc[npcID].ModNPC as Bartender; // Reference spawned NPC
 
@@ -213,8 +222,8 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             int lockedType = ModContent.TileType<SaloonTrapdoorClosed_Locked>();
 
-            int worldPosX = _dungeonOrigin.X + coords.X;
-            int worldPosY = _dungeonOrigin.Y + coords.Y;
+            int worldPosX = _saloonOrigin.X + coords.X;
+            int worldPosY = _saloonOrigin.Y + coords.Y;
 
             WorldGen.KillTile(worldPosX, worldPosY); // Making sure there's nothing there to guarantee spawn
             WorldGen.PlaceTile(worldPosX, worldPosY,lockedType, mute: true, forced: true);
@@ -231,9 +240,9 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             Dictionary<string, Point16> poi = new Dictionary<string, Point16>();
 
-            for (int x = _dungeonOrigin.X; x < _dungeonOrigin.X + _dungeonDimensions.X; x++)
+            for (int x = _saloonOrigin.X; x < _saloonOrigin.X + _saloonDimensions.X; x++)
             {
-                for (int y = _dungeonOrigin.Y; y < _dungeonOrigin.Y + _dungeonDimensions.Y; y++)
+                for (int y = _saloonOrigin.Y; y < _saloonOrigin.Y + _saloonDimensions.Y; y++)
                 {
                     Tile tile = Main.tile[x, y];
                     ushort type = tile.TileType;
@@ -263,7 +272,7 @@ namespace TheGoodTheBadAndTheIntoxicated
 
                     if (key != "")
                     {
-                        poi.Add(key, new Point16(x - _dungeonOrigin.X, y - _dungeonOrigin.Y));
+                        poi.Add(key, new Point16(x - _saloonOrigin.X, y - _saloonOrigin.Y));
                     }
 
                     WorldGen.KillTile(x, y);
@@ -281,8 +290,8 @@ namespace TheGoodTheBadAndTheIntoxicated
             foreach (KeyValuePair<string, Point16> key in _poi)
             {
                 Point16 markerLoc = new Point16(
-                    _dungeonOrigin.X + key.Value.X,
-                    _dungeonOrigin.Y + key.Value.Y);
+                    _saloonOrigin.X + key.Value.X,
+                    _saloonOrigin.Y + key.Value.Y);
 
                 // Note that in TEdit, the marker has to be placed
                 // next to at least one tile that it should be replaced with
