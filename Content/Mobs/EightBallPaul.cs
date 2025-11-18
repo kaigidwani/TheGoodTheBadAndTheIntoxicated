@@ -51,9 +51,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.width = 200;
             NPC.height = 350;
             NPC.aiStyle = -1;
-            NPC.damage = 10;
-            NPC.defense = 88;
-            NPC.lifeMax = 888;
+            NPC.damage = 18;
+            NPC.defense = 18;
+            NPC.lifeMax = 8888;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
@@ -275,7 +275,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
             // dir is negaeted to swing away from hit source
             // The more damage done, the stronger the swing
-            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * lengthScale;
+            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * (float)Math.Cos(swingAngle) * lengthScale;
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
@@ -284,7 +284,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
             // dir is negaeted to swing away from hit source
             // The more damage done, the stronger the swing
-            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * lengthScale;
+            swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * (float)Math.Cos(swingAngle) * lengthScale;
         }
 
 
