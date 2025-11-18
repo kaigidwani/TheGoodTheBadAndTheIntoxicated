@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using SubworldLibrary;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
@@ -19,18 +21,17 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             Attack
         }
 
-        private const float noticeRange = 500.0f;
-        private const float attackRange = 40.0f;
+        private const float noticeRange = 600.0f;
+        private const float attackRange = 100.0f;
 
         private const float walkSpeed = 1.5f;
-        private const float walkAccel = 0.10f;
-        private const float lungeSpeed = 4.0f;
-        private const int attackCD = 60;
+        private const float lungeSpeed = 20.0f;
+        private const int attackCD = 120;
 
         private const int frameCount = 15;
 
         public ref float AI_State => ref NPC.ai[0];
-        public ref float AI_Timer => ref NPC.localAI[1];
+        public ref float AI_Timer => ref NPC.localAI[0];
 
         public static LocalizedText GotStompedText { get; private set; }
 
@@ -41,10 +42,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override void SetDefaults()
         {
-            NPC.width = 40; // The width of the npc's hitbox (in pixels)
-            NPC.height = 44; // The height of the npc's hitbox (in pixels)
+            NPC.width = 20; // The width of the npc's hitbox (in pixels)
+            NPC.height = 50; // The height of the npc's hitbox (in pixels)
             NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
-            NPC.damage = 1; // The amount of damage that this npc deals
+            NPC.damage = 10; // The amount of damage that this npc deals
             NPC.defense = 4; // The amount of defense that this npc has
             NPC.lifeMax = 80; // The amount of health that this npc has
             NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
@@ -54,8 +55,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            // spawn in the overworld.
-            return SpawnCondition.OverworldDaySlime.Chance * 50.0f;
+            // This NPC spawns when the player is in the mod subworld and the spawn position is underground.
+            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY >= Main.worldSurface)
+            {
+                return 10f;
+            }
+
+            return 0f;
         }
 
         public override void AI()
@@ -81,9 +87,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         private void Idle()
         {
-            NPC.aiStyle = -1;
-            AIType = -1;
-
             NPC.velocity.X = 0.0f;
 
             NPC.TargetClosest(true);
@@ -96,18 +99,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         private void Notice()
         {
-            NPC.aiStyle = NPCAIStyleID.Unicorn; // Unicorn AI handles slopes/steps and has built-in lunge attack.
-            AIType = NPCID.Unicorn;
-
             // If the targeted player is in attack range,
             // and this NPC is done with its attack cooldown,
             // we can enter the Attack state.
-            if (Main.player[NPC.target].Distance(NPC.Center) < attackRange)
+            if (Main.player[NPC.target].Distance(NPC.Center) < attackRange && AI_Timer <= 0.0f)
             {
-                if (AI_Timer <= 0.0f)
-                {
-                    AI_State = (float)ActionState.Attack;
-                }
+                AI_State = (float)ActionState.Attack;
             }
             else
             {
@@ -120,26 +117,31 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 }
                 else
                 {
-                    int direction = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
-                    NPC.direction = direction;
-                    NPC.spriteDirection = direction;
+                    // Face the player
+                    int faceDir = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
+                    NPC.direction = faceDir;
+                    NPC.spriteDirection = faceDir;
 
-                    // Move towards the player.
-                    NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X + (direction * walkAccel), -walkSpeed, walkSpeed);
+                    // Move towards player
+                    float targetSpeed = faceDir * walkSpeed;
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, targetSpeed, 0.1f);
 
+                    // Do a tiny hop over a ledge or slope
+                    if (NPC.velocity.Y == 0f && NPC.collideX)
+                    {
+                        NPC.velocity.Y = -6f;
+                    }
                 }
             }
         }
 
         private void Attack()
         {
-            NPC.aiStyle = -1;
-            AIType = -1;
-
             Vector2 direction = Main.player[NPC.target].Center - NPC.Center;
             direction.Normalize();
 
-            NPC.velocity = direction * lungeSpeed;
+            // Lunge towards the player with a speed based on distance
+            NPC.velocity = direction * (lungeSpeed * MathHelper.Clamp(Main.player[NPC.target].Distance(NPC.Center) / 200f, 0.4f, 1f));
 
             AI_State = (float)ActionState.Notice;
             AI_Timer = attackCD;
