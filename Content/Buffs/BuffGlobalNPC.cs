@@ -14,7 +14,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Buffs
             // If an entity has the Marked debuff, they take more damage
             if (npc.HasBuff(ModContent.BuffType<Marked>()))
             {
-                modifiers.FinalDamage *= 2.0f; // +100% damage
+                modifiers.FinalDamage *= 1.5f; // +25% damage
             }
         }
 
