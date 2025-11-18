@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TheGoodTheBadAndTheIntoxicated.Content.Items;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
@@ -68,7 +69,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPCShop shop = new NPCShop(NPC.type, "Shop")
                 .Add(ItemID.Ale)
                 .Add(ItemID.Mug)
-                .Add(ItemID.Keg);
+                .Add(ItemID.Keg)
+                .Add(ModContent.ItemType<SaloonTrapdoorKey>());
 
             shop.Register();
         }

@@ -269,3 +269,5 @@ Projectiles: {
 	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
 	BulletTest.DisplayName: Bullet Test
 }
+
+Projectiles.BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
