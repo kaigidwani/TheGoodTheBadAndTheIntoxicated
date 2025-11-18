@@ -14,6 +14,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 		{
 			// Copy stats of lead shortsword
             Item.CloneDefaults(ItemID.LeadShortsword);
+            Item.shoot = ModContent.ProjectileType<BrokenBottleProjectile>();
         }
 
 		public override void AddRecipes()

@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TheGoodTheBadAndTheIntoxicated.Content.Items;
+using TheGoodTheBadAndTheIntoxicated.Content.Mobs;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
@@ -86,6 +87,32 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 .Add(ModContent.ItemType<BarMap>()); // sells the bar map
 
             shop.Register();
+        }
+
+        public override void ModifyActiveShop(string shopName, Item[] items)
+        {
+            // only modifying this NPC's shop
+            if (shopName != "TheGoodTheBadAndTheIntoxicated/OldGunslinger/Shop")
+                return;
+
+            int index = 0;
+
+            // Find the first empty slot
+            while (items[index] != null)
+            {
+                index++;
+            }
+
+            // gunslinger sells new guns when paul is defeated (FOR NOW, IT CHECKS IF CITHULU IS DEAD)
+            if (NPC.downedBoss1) //BossSystem.paulDead
+            {
+                items[index] = new Item();
+                items[index].SetDefaults(ModContent.ItemType<TheRattler>());
+                items[index + 1] = new Item();
+                items[index + 1].SetDefaults(ModContent.ItemType<LeverAction>());
+                items[index + 2] = new Item();
+                items[index + 2].SetDefaults(ModContent.ItemType<BrokenBottle>());
+            }
         }
 
         //picks a random piece of dialouge for the gunslinger to say
