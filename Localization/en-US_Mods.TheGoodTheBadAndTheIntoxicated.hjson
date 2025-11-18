@@ -262,6 +262,8 @@ NPCs: {
 	}
 
 	EightBallPaul.DisplayName: Eight Ball Paul
+	NumberFourteen.DisplayName: Number Fourteen
+	NumberTwo.DisplayName: Number Two
 }
 
 Projectiles: {
