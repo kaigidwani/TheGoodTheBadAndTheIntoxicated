@@ -43,7 +43,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.width = 15; // The width of the npc's hitbox (in pixels)
             NPC.height = 50; // The height of the npc's hitbox (in pixels)
             NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
-            NPC.damage = 3; // The amount of damage that this npc deals
+            NPC.damage = 5; // The amount of damage that this npc deals
             NPC.defense = 2; // The amount of defense that this npc has
             NPC.lifeMax = 60; // The amount of health that this npc has
             NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
