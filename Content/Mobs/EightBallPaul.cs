@@ -20,17 +20,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
     internal class EightBallPaul : ModNPC
     {
         #region fields
-        // Fields for weapons' cooldown
-        private int _rattlerCD;
-        private int _leverCD;
-        private int _boltCD;
-        private int _sixCD;
-
-        // Fields for weapons' position
-        //private static readonly Vector2 leftLeg_2 = new Vector2(-115f, 110f);
-        //private static readonly Vector2 leftLeg_3 = new Vector2(-120f, 70f);
-        //private static readonly Vector2 rightLeg_2 = new Vector2(115f, 110f);
-        //private static readonly Vector2 rightLeg_3 = new Vector2(120f, 70f);
+        // Fields for weapons and projectiles
         private static readonly Vector2[] muzzles = new Vector2[]
         {
             new Vector2(-115f, 110f), // leftLeg_2
@@ -38,11 +28,16 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             new Vector2(115f, 110f),  // rightLeg_2
             new Vector2(120f, 70f)    // rightLeg_3
         };
+        private Vector2 shootDir;
+        private Vector2 spawnPos;
+        private Vector2 targetPos;
 
         // Fields for attack algorithm
         public ref float AI_Weapon => ref NPC.localAI[0];   // Weapon index
         public ref float AI_State => ref NPC.localAI[1];    // State
         public ref float AI_Timer => ref NPC.localAI[2];    // State timer
+        private Color laserColor;
+        private bool _drawLaser;
 
         // Fields for NPC's web
         private bool _anchored;                 // Whether or not the NPC is anchored
@@ -71,36 +66,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = 8888f;
         }
 
-        public override void SetStaticDefaults()
-        {
-            AI_Weapon = Main.rand.Next(0, 3);   // Weapon index
-            base.SetStaticDefaults();
-        }
-
         public override void AI()
         {
             // ---------- Common AI code ----------
             // Sets the closest player as target. If null, skip the whole AI code.
             NPC.TargetClosest(true);
             if (!Main.player[NPC.target].active || Main.player[NPC.target].dead) return;
-
-            // Cooldown weapons
-            if (_rattlerCD > 0)
-            {
-                _rattlerCD--;
-            }
-            if (_leverCD > 0)
-            {
-                _leverCD--;
-            }
-            if (_boltCD > 0)
-            {
-                _boltCD--;
-            }
-            if (_sixCD > 0)
-            {
-                _sixCD--;
-            }
 
 
 
@@ -167,7 +138,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
             // ---------- Weapon AI code ----------
 
-            int AimTime = Main.rand.Next(120, 180); // Aims for 2-3 seconds
+            int AimTime = Main.rand.Next(60, 120);  // Aims for 1-2 seconds
             const int HoldTime = 30;                // Holds for 0.5 seconds before firing
             const int attackCD = 30;                // 0.5 seconds between attack sessions
 
@@ -184,34 +155,46 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 case 1f:    // Aiming
                     AI_Timer--;
 
+                    shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[(int)AI_Weapon]).SafeNormalize(Vector2.UnitX);
+                    spawnPos = NPC.Center + muzzles[(int)AI_Weapon] + 20f * shootDir;
+                    targetPos = Main.player[NPC.target].Center;
+
+                    laserColor = Color.Red;
+                    _drawLaser = true;
+
                     if (AI_Timer <= 0f)
                     {
                         AI_State = 2f;
                         AI_Timer = HoldTime;
                     }
+
                     break;
                 case 2f:    // Holding
                     AI_Timer--;
+
+                    shootDir = (targetPos - NPC.Center - muzzles[(int)AI_Weapon]).SafeNormalize(Vector2.UnitX);
+                    spawnPos = NPC.Center + muzzles[(int)AI_Weapon] + 20f * shootDir;
+
+                    laserColor = Color.White;
+
                     if (AI_Timer <= 0f)
                     {
                         AI_State = 3f;
                     }
+
                     break;
                 case 3f:    // Firing
-                    Vector2 shootDir;
-                    Vector2 spawnPos;
+                    _drawLaser = false;
+
                     Vector2 velocity;
                     int numProjectiles;
 
                     switch (AI_Weapon)
                     {
-                        case 0f:
-                            // Rattler
+                        case 0f:    // Rattler
                             numProjectiles = 6;
                             for (int i = 0; i < numProjectiles; i++)
                             {
-                                shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX);  // Gun to player
-                                spawnPos = NPC.Center + muzzles[0] + 40f * shootDir;
                                 velocity = shootDir * 7f;
 
                                 // Rotate the velocity randomly by 30 degrees at max.
@@ -222,23 +205,15 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
                                 SpawnProjectile(spawnPos, newVelocity, ProjectileID.MeteorShot, 20, 6.5f);
                             }
-                            _rattlerCD = 60 * 3;
+
                             break;
-                        case 1f:
-                            // Lever Action
-                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX);
-                            spawnPos = NPC.Center + muzzles[1] + 20f * shootDir;
+                        case 1f:    // Lever Action
                             velocity = shootDir * 8f;
 
                             SpawnProjectile(spawnPos, velocity, ProjectileID.VortexLaser, 28, 5f);
 
-                            _leverCD = 45 * 3;
                             break;
-                        case 2f:
-                            // Bolt Action
-                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX);
-                            spawnPos = NPC.Center + muzzles[2] + 20f * shootDir;
-
+                        case 2f:    // Bolt Action
                             numProjectiles = 4 + Main.rand.Next(2); // 4-5 shots
                             float rotation = MathHelper.ToRadians(5);
                             velocity = shootDir * 8f;
@@ -249,34 +224,33 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
                                 SpawnProjectile(spawnPos, newVelocity, ProjectileID.VortexLaser, 15, 6f);
                             }
-                            _boltCD = 50 * 3;
+
                             break;
-                        case 3f:
-                            // Six Shooter
-                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX);
-                            spawnPos = NPC.Center + muzzles[3] + 20f * shootDir;
+                        case 3f:    // Six Shooter
                             velocity = shootDir * 16f;
 
                             SpawnProjectile(spawnPos, velocity, ProjectileID.BulletDeadeye, 14, 4f);
 
-                            _sixCD = 25 * 3;
                             break;
                     }
 
                     if (AI_Timer <= 0f)
                     {
-                        AI_Weapon = Main.rand.Next(1, 5); // Next weapon
+                        AI_Weapon = Main.rand.Next(0, 4); // Next weapon
                         AI_State = 4f;
                         AI_Timer = attackCD;
                     }
+
                     break;
                 case 4f:    // CD
                     AI_Timer--;
+
                     if (AI_Timer <= 0f)
                     {
                         AI_State = 1f;
                         AI_Timer = AimTime;
                     }
+
                     break;
             }
         }
@@ -312,16 +286,38 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         {
             Player player = Main.player[NPC.target];
 
+            if (_drawLaser)
+            {
+                Vector2 laserFrom = spawnPos - screenPos;
+                Vector2 laserTo = targetPos - screenPos;
+                Vector2 dir = laserTo - laserFrom;
+                float length = dir.Length();
+                float rotation = dir.ToRotation();
+
+                // Draw the laser pointer
+                Main.EntitySpriteDraw(
+                    TextureAssets.MagicPixel.Value,
+                    laserFrom,
+                    new Rectangle(0, 0, 1, 1),
+                    laserColor,
+                    rotation,
+                    Vector2.Zero,
+                    new Vector2(length, 2f),
+                    SpriteEffects.None,
+                    0
+                );
+            }
+
             Texture2D rattlerTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value;
             Texture2D leverTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value;
             Texture2D boltTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value;
             Texture2D sixTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/SixShooter").Value;
 
             // Draw the guns aiming toward the player
-            DrawGun(spriteBatch, rattlerTex, NPC.Center + muzzles[0] - screenPos, (player.Center - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, leverTex, NPC.Center + muzzles[1] - screenPos, (player.Center - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, boltTex, NPC.Center + muzzles[2] - screenPos, (player.Center - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, sixTex, NPC.Center + muzzles[3] - screenPos, (player.Center - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, rattlerTex, NPC.Center + muzzles[0] - screenPos, (targetPos - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, leverTex, NPC.Center + muzzles[1] - screenPos, (targetPos - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, boltTex, NPC.Center + muzzles[2] - screenPos, (targetPos - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, sixTex, NPC.Center + muzzles[3] - screenPos, (targetPos - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX));
         }
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
