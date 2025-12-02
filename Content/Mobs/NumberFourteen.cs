@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SubworldLibrary;
 using System;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -53,6 +54,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
+            // This NPC spawns when the player is in the mod subworld and the spawn position is underground.
+            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY >= Main.UnderworldLayer)
+            {
+                return 10f;
+            }
+
             return 0f;
         }
 
