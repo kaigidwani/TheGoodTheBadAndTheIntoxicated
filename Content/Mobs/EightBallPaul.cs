@@ -57,6 +57,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
+
+            NPC.boss = true;
+            if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/Boss");
+            }
         }
 
         public override void AI()
