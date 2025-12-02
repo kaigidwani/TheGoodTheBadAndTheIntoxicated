@@ -40,13 +40,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 
                 // adjust velocity
                 Projectile.velocity = Vector2.Normalize(Vector2.Lerp(Projectile.velocity, direction * currentSpeed, homingStrength)) * currentSpeed;
-
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2; // rotate in the direction it is moving
             }
-            else
-            {
-                Projectile.rotation += MathF.Sin((1f / 60f) * 5f); // rotate constantly
-            }
+            Projectile.rotation = Projectile.velocity.ToRotation(); // rotate in the direction it is moving
 
             Lighting.AddLight(Projectile.Center, 0.8f, 0.05f, 0.1f); // projectile glows
             if (Main.rand.NextBool(3)) // projectile spawns dust particles
