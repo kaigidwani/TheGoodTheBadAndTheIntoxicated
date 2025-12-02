@@ -27,10 +27,22 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         private int _sixCD;
 
         // Fields for weapons' position
-        private static readonly Vector2 leftLeg_1 = new Vector2(-115f, 110f);
-        private static readonly Vector2 rightLeg_1 = new Vector2(115f, 110f);
-        private static readonly Vector2 leftLeg_2 = new Vector2(-120f, 70f);
-        private static readonly Vector2 rightLeg_2 = new Vector2(120f, 70f);
+        //private static readonly Vector2 leftLeg_2 = new Vector2(-115f, 110f);
+        //private static readonly Vector2 leftLeg_3 = new Vector2(-120f, 70f);
+        //private static readonly Vector2 rightLeg_2 = new Vector2(115f, 110f);
+        //private static readonly Vector2 rightLeg_3 = new Vector2(120f, 70f);
+        private static readonly Vector2[] muzzles = new Vector2[]
+        {
+            new Vector2(-115f, 110f), // leftLeg_2
+            new Vector2(-120f, 70f),  // leftLeg_3
+            new Vector2(115f, 110f),  // rightLeg_2
+            new Vector2(120f, 70f)    // rightLeg_3
+        };
+
+        // Fields for attack algorithm
+        public ref float AI_Weapon => ref NPC.localAI[0];   // Weapon index
+        public ref float AI_State => ref NPC.localAI[1];    // State
+        public ref float AI_Timer => ref NPC.localAI[2];    // State timer
 
         // Fields for NPC's web
         private bool _anchored;                 // Whether or not the NPC is anchored
@@ -57,6 +69,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            AI_Weapon = Main.rand.Next(0, 3);   // Weapon index
+            base.SetStaticDefaults();
         }
 
         public override void AI()
@@ -148,80 +166,118 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
 
             // ---------- Weapon AI code ----------
-            // Summon projectiles
-            if (_rattlerCD <= 0)
+
+            int AimTime = Main.rand.Next(120, 180); // Aims for 2-3 seconds
+            const int HoldTime = 30;                // Holds for 0.5 seconds before firing
+            const int attackCD = 30;                // 0.5 seconds between attack sessions
+
+            if (AI_State == 0f)
             {
-                const int numProjectiles = 6;
-                for (int i = 0; i < numProjectiles; i++)
-                {
-                    Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX);  // Gun to player
-                    Vector2 spawnPos = NPC.Center + leftLeg_1 + 40f * shootDir;
-                    Vector2 velocity = shootDir * 7f;
-
-                    // Rotate the velocity randomly by 30 degrees at max.
-                    Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
-
-                    // Decrease velocity randomly for nicer visuals.
-                    newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-
-                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, newVelocity, ProjectileID.MeteorShot, 20, 6.5f, Main.myPlayer);
-                    Main.projectile[id].friendly = false;
-                    Main.projectile[id].hostile = true;
-                    Main.projectile[id].npcProj = true;
-
-                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
-                }
-                _rattlerCD = 60 * 3;
+                AI_State = 1f;        // State
+                AI_Timer = AimTime;   // State timer
             }
-            if (_leverCD <= 0)
+
+            Console.WriteLine(AI_Weapon);
+
+            switch (AI_State)
             {
-                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX);
-                Vector2 spawnPos = NPC.Center + rightLeg_1 + 20f * shootDir;
-                Vector2 velocity = shootDir * 8f;
+                case 1f:    // Aiming
+                    AI_Timer--;
 
-                int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, velocity, ProjectileID.VortexLaser, 28, 5f, Main.myPlayer);
-                Main.projectile[id].friendly = false;
-                Main.projectile[id].hostile = true;
-                Main.projectile[id].npcProj = true;
-                _leverCD = 45 * 3;
+                    if (AI_Timer <= 0f)
+                    {
+                        AI_State = 2f;
+                        AI_Timer = HoldTime;
+                    }
+                    break;
+                case 2f:    // Holding
+                    AI_Timer--;
+                    if (AI_Timer <= 0f)
+                    {
+                        AI_State = 3f;
+                    }
+                    break;
+                case 3f:    // Firing
+                    Vector2 shootDir;
+                    Vector2 spawnPos;
+                    Vector2 velocity;
+                    int numProjectiles;
 
-                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
-            }
-            if (_boltCD <= 0)
-            {
-                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - leftLeg_2).SafeNormalize(Vector2.UnitX);
-                Vector2 spawnPos = NPC.Center + leftLeg_2 + 20f * shootDir;
+                    switch (AI_Weapon)
+                    {
+                        case 0f:
+                            // Rattler
+                            numProjectiles = 6;
+                            for (int i = 0; i < numProjectiles; i++)
+                            {
+                                shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX);  // Gun to player
+                                spawnPos = NPC.Center + muzzles[0] + 40f * shootDir;
+                                velocity = shootDir * 7f;
 
-                float numProjectiles = 4 + Main.rand.Next(2); // 4-5 shots
-                float rotation = MathHelper.ToRadians(5);
-                Vector2 velocity = shootDir * 8f;
+                                // Rotate the velocity randomly by 30 degrees at max.
+                                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
 
-                for (int i = 0; i < numProjectiles; i++)
-                {
-                    Vector2 newVelocity = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProjectiles - 1)));
+                                // Decrease velocity randomly for nicer visuals.
+                                newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 
-                    int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, newVelocity, ProjectileID.VortexLaser, 15, 6f, Main.myPlayer);
-                    Main.projectile[id].friendly = false;
-                    Main.projectile[id].hostile = true;
-                    Main.projectile[id].npcProj = true;
+                                SpawnProjectile(spawnPos, newVelocity, ProjectileID.MeteorShot, 20, 6.5f);
+                            }
+                            _rattlerCD = 60 * 3;
+                            break;
+                        case 1f:
+                            // Lever Action
+                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX);
+                            spawnPos = NPC.Center + muzzles[1] + 20f * shootDir;
+                            velocity = shootDir * 8f;
 
-                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
-                }
-                _boltCD = 50 * 3;
-            }
-            if (_sixCD <= 0)
-            {
-                Vector2 shootDir = (Main.player[NPC.target].Center - NPC.Center - rightLeg_2).SafeNormalize(Vector2.UnitX);
-                Vector2 spawnPos = NPC.Center + rightLeg_2 + 20f * shootDir;
-                Vector2 velocity = shootDir * 16f;
+                            SpawnProjectile(spawnPos, velocity, ProjectileID.VortexLaser, 28, 5f);
 
-                int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, velocity, ProjectileID.BulletDeadeye, 14, 4f, Main.myPlayer);
-                Main.projectile[id].friendly = false;
-                Main.projectile[id].hostile = true;
-                Main.projectile[id].npcProj = true;
-                _sixCD = 25 * 3;
+                            _leverCD = 45 * 3;
+                            break;
+                        case 2f:
+                            // Bolt Action
+                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX);
+                            spawnPos = NPC.Center + muzzles[2] + 20f * shootDir;
 
-                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
+                            numProjectiles = 4 + Main.rand.Next(2); // 4-5 shots
+                            float rotation = MathHelper.ToRadians(5);
+                            velocity = shootDir * 8f;
+
+                            for (int i = 0; i < numProjectiles; i++)
+                            {
+                                Vector2 newVelocity = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProjectiles - 1)));
+
+                                SpawnProjectile(spawnPos, newVelocity, ProjectileID.VortexLaser, 15, 6f);
+                            }
+                            _boltCD = 50 * 3;
+                            break;
+                        case 3f:
+                            // Six Shooter
+                            shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX);
+                            spawnPos = NPC.Center + muzzles[3] + 20f * shootDir;
+                            velocity = shootDir * 16f;
+
+                            SpawnProjectile(spawnPos, velocity, ProjectileID.BulletDeadeye, 14, 4f);
+
+                            _sixCD = 25 * 3;
+                            break;
+                    }
+
+                    if (AI_Timer <= 0f)
+                    {
+                        AI_Weapon = Main.rand.Next(1, 5); // Next weapon
+                        AI_State = 4f;
+                        AI_Timer = attackCD;
+                    }
+                    break;
+                case 4f:    // CD
+                    AI_Timer--;
+                    if (AI_Timer <= 0f)
+                    {
+                        AI_State = 1f;
+                        AI_Timer = AimTime;
+                    }
+                    break;
             }
         }
 
@@ -262,10 +318,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             Texture2D sixTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/SixShooter").Value;
 
             // Draw the guns aiming toward the player
-            DrawGun(spriteBatch, rattlerTex, NPC.Center + leftLeg_1 - screenPos, (player.Center - NPC.Center - leftLeg_1).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, leverTex, NPC.Center + rightLeg_1 - screenPos, (player.Center - NPC.Center - rightLeg_1).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, boltTex, NPC.Center + leftLeg_2 - screenPos, (player.Center - NPC.Center - leftLeg_2).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, sixTex, NPC.Center + rightLeg_2 - screenPos, (player.Center - NPC.Center - rightLeg_2).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, rattlerTex, NPC.Center + muzzles[0] - screenPos, (player.Center - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, leverTex, NPC.Center + muzzles[1] - screenPos, (player.Center - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, boltTex, NPC.Center + muzzles[2] - screenPos, (player.Center - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX));
+            DrawGun(spriteBatch, sixTex, NPC.Center + muzzles[3] - screenPos, (player.Center - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX));
         }
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
@@ -289,11 +345,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 
 
 
-        /// <summary>
-        /// It is a helper function to find a ceiling for web.
-        /// </summary>
-        /// <param name="fromWorld">The beginning point; usually NPC.Center</param>
-        /// <returns>The calculated end point of the web</returns>
+        // ---------- Helper methods ----------
         private static Vector2 FindCeiling(Vector2 fromWorld)
         {
             int tx = (int)(fromWorld.X / 16f);
@@ -317,6 +369,15 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             float rot = aimDir.ToRotation();
             var fx = (aimDir.X < 0f) ? SpriteEffects.FlipVertically : SpriteEffects.None; // simple flip
             spriteBatch.Draw(tex, worldOnScreen, null, Color.White, rot, tex.Size() * 0.5f, 1f, fx, 0f);
+        }
+
+        private void SpawnProjectile(Vector2 spawnPos, Vector2 velocity, short type, int damage, float knockback)
+        {
+            int id = Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, velocity, type, damage, knockback, Main.myPlayer);
+            Main.projectile[id].friendly = false;
+            Main.projectile[id].hostile = true;
+            Main.projectile[id].npcProj = true;
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
         }
     }
 }
