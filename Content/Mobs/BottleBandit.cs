@@ -56,7 +56,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             // This NPC spawns when the player is in the mod subworld and the spawn position is underground.
-            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY >= Main.UnderworldLayer)
+            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY >= Main.worldSurface)
             {
                 return 10f;
             }
