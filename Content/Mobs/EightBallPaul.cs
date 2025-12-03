@@ -70,8 +70,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.height = 350;
             NPC.aiStyle = -1;
             NPC.damage = 8;
-            NPC.defense = -8;
+            NPC.defense = -18;
             NPC.lifeMax = 8888;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
@@ -378,6 +380,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             // dir is negaeted to swing away from hit source
             // The more damage done, the stronger the swing
             swingSpeed += -dir * ((float)Math.Sqrt(damageDone) / 88f) * (float)Math.Cos(swingAngle) * lengthScale;
+        }
+
+        public override void OnKill()
+        {
+            base.OnKill();
+            BossSystem.paulDead = true;
         }
 
 
