@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -40,16 +41,20 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
                 // adjust velocity
                 Projectile.velocity = Vector2.Normalize(Vector2.Lerp(Projectile.velocity, direction * currentSpeed, homingStrength)) * currentSpeed;
             }
-
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2; // rotate in the direction it is moving
+            
+            // rotate in the direction it is moving
+            Projectile.rotation = Projectile.velocity.ToRotation(); 
+            if (Projectile.velocity.X < 0)
+            {
+                Projectile.spriteDirection = -1;
+                Projectile.rotation += MathHelper.Pi;
+            }
 
             Lighting.AddLight(Projectile.Center, 0.8f, 0.05f, 0.1f); // projectile glows
             if (Main.rand.NextBool(3)) // projectile spawns dust particles
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.AmberBolt);
             }
-
-
         }
 
         private NPC GetClosestEnemy(float maxDetectDistance)

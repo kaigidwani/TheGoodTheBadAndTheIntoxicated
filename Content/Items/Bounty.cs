@@ -19,7 +19,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.useTime = 20;
             Item.damage = 15; // low damage
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 10; // 20 mana = 1 container
+            Item.mana = 70; // 20 mana = 1 container
             Item.knockBack = 0.0f; // no knockback
             Item.rare = ItemRarityID.Orange;
             Item.value = Item.buyPrice(silver: 50);
