@@ -65,7 +65,11 @@ Items: {
 
 	Bounty: {
 		DisplayName: Bounty
-		Tooltip: ""
+		Tooltip:
+			'''
+			'Mark enemies for death, 
+			making them take more damage.'
+			'''
 
 		TrapdoorKey: {
 			Tooltip: ""
@@ -266,6 +270,6 @@ NPCs: {
 
 Projectiles: {
 	BountyProjectile.DisplayName: Bounty Projectile
-	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
 	BulletTest.DisplayName: Bullet Test
+	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
 }
