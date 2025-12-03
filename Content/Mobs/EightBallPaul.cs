@@ -17,6 +17,7 @@ using SubworldLibrary;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
+    [AutoloadBossHead]
     internal class EightBallPaul : ModNPC
     {
         #region fields
@@ -28,6 +29,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             new Vector2(115f, 110f),  // rightLeg_2
             new Vector2(120f, 70f)    // rightLeg_3
         };
+        private static readonly Texture2D[] weaponTextures = new Texture2D[]
+        {
+            ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value,
+            ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value,
+            ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value,
+            ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/SixShooter").Value
+        };
+        private readonly float[] weaponAngles = new float[4];
         private Vector2 shootDir;
         private Vector2 spawnPos;
         private Vector2 targetPos;
@@ -38,6 +47,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
         public ref float AI_Timer => ref NPC.localAI[2];    // State timer
         private Color laserColor;
         private bool _drawLaser;
+        float nextWeapon = Main.rand.Next(0, 4);
+        float prevWeapon = -1;
 
         // Fields for NPC's web
         private bool _anchored;                 // Whether or not the NPC is anchored
@@ -58,12 +69,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.width = 200;
             NPC.height = 350;
             NPC.aiStyle = -1;
-            NPC.damage = 18;
-            NPC.defense = 18;
+            NPC.damage = 8;
+            NPC.defense = -8;
             NPC.lifeMax = 8888;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
+
+            NPC.boss = true;
         }
 
         public override void AI()
@@ -155,6 +168,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 case 1f:    // Aiming
                     AI_Timer--;
 
+                    if (AI_Weapon != nextWeapon)
+                    {
+                        AI_Weapon = nextWeapon;
+                    }
+
                     shootDir = (Main.player[NPC.target].Center - NPC.Center - muzzles[(int)AI_Weapon]).SafeNormalize(Vector2.UnitX);
                     spawnPos = NPC.Center + muzzles[(int)AI_Weapon] + 20f * shootDir;
                     targetPos = Main.player[NPC.target].Center;
@@ -234,9 +252,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                             break;
                     }
 
+                    prevWeapon = AI_Weapon;
+                    do
+                    {
+                        nextWeapon = Main.rand.Next(0, 4);
+                    } while (nextWeapon == prevWeapon);
+
                     if (AI_Timer <= 0f)
                     {
-                        AI_Weapon = Main.rand.Next(0, 4); // Next weapon
                         AI_State = 4f;
                         AI_Timer = attackCD;
                     }
@@ -306,18 +329,36 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     SpriteEffects.None,
                     0
                 );
+
+                // Draw the crosshair
+                Texture2D crosshair = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Crosshair/EightBallPaulCrossHair").Value;
+                spriteBatch.Draw(
+                    crosshair,
+                    laserTo,
+                    null,
+                    Color.White,
+                    0f,
+                    crosshair.Size() * 0.5f,
+                    1f,
+                    SpriteEffects.None,
+                    0f
+                );
             }
 
-            Texture2D rattlerTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/TheRattler").Value;
-            Texture2D leverTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/LeverAction").Value;
-            Texture2D boltTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/BoltAction").Value;
-            Texture2D sixTex = ModContent.Request<Texture2D>("TheGoodTheBadAndTheIntoxicated/Content/Items/SixShooter").Value;
+            // Draw the guns. Using for loop for different rotation values
+            for (int i = 0; i < weaponAngles.Length; i++)
+            {
+                if (i == AI_Weapon)
+                {
+                    weaponAngles[i] = SmoothAngle(weaponAngles[i], (targetPos - NPC.Center - muzzles[i]).ToRotation(), 0.18f);
+                }
+                else
+                {
+                    weaponAngles[i] = SmoothAngle(weaponAngles[i], (player.Center - NPC.Center - muzzles[i]).ToRotation(), 0.18f);
+                }
 
-            // Draw the guns aiming toward the player
-            DrawGun(spriteBatch, rattlerTex, NPC.Center + muzzles[0] - screenPos, (targetPos - NPC.Center - muzzles[0]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, leverTex, NPC.Center + muzzles[1] - screenPos, (targetPos - NPC.Center - muzzles[1]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, boltTex, NPC.Center + muzzles[2] - screenPos, (targetPos - NPC.Center - muzzles[2]).SafeNormalize(Vector2.UnitX));
-            DrawGun(spriteBatch, sixTex, NPC.Center + muzzles[3] - screenPos, (targetPos - NPC.Center - muzzles[3]).SafeNormalize(Vector2.UnitX));
+                DrawGun(spriteBatch, weaponTextures[i], NPC.Center + muzzles[i] - screenPos, weaponAngles[i].ToRotationVector2());
+            }
         }
 
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
@@ -374,6 +415,19 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             Main.projectile[id].hostile = true;
             Main.projectile[id].npcProj = true;
             Terraria.Audio.SoundEngine.PlaySound(SoundID.Item36, spawnPos);
+        }
+
+        private float SmoothAngle(float current, float target, float maxStep)
+        {
+            float diff = MathHelper.WrapAngle(target - current);
+            if (Math.Abs(diff) <= maxStep)
+            {
+                return target;
+            }
+            else
+            {
+                return current + Math.Sign(diff) * maxStep;
+            }
         }
     }
 }

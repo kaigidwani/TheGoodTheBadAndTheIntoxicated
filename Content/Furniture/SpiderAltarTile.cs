@@ -24,8 +24,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Furniture
             Main.tileNoFail[Type] = false;
             Main.tileLavaDeath[Type] = false;
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-            TileObjectData.newTile.Origin = new Point16(1, 1); // center bottom
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+            TileObjectData.newTile.Origin = new Point16(1, 0); // center bottom
             TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook((i, j, type, style, dir, alt) => 0, -1, 0, false);
             TileObjectData.addTile(Type);
 
