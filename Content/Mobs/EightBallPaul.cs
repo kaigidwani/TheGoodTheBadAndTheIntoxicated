@@ -207,7 +207,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     _drawLaser = false;
 
                     Vector2 velocity;
-                    int numProjectiles;
+                    float numProjectiles;
 
                     switch (AI_Weapon)
                     {
