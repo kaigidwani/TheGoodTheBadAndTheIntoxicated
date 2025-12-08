@@ -22,6 +22,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Projectile.DamageType = DamageClass.Magic;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true; // does not go through tiles
+            Main.projFrames[Projectile.type] = 3;
         }
 
         public override void AI()
@@ -54,6 +55,19 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             if (Main.rand.NextBool(3)) // projectile spawns dust particles
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.AmberBolt);
+            }
+
+            // projectile cycles through the spritesheet
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 5) // switches every X ticks
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                {
+                    Projectile.frame = 0; // loop back to first frame
+                }
             }
         }
 
