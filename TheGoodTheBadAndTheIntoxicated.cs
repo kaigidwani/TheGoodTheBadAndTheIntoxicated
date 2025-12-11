@@ -21,6 +21,8 @@ using TheGoodTheBadAndTheIntoxicated.Content.Furniture;
 using Microsoft.Build.Tasks;
 using TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture;
 using System.Net.Sockets;
+using Terraria.GameContent.Personalities;
+using Terraria.GameContent.Biomes;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
@@ -356,7 +358,7 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             progress.Message = "Generating terrain"; // Sets the text displayed for this pass
             Main.worldSurface = Main.maxTilesY * 0.25;
-            Main.rockLayer = Main.maxTilesY * 0.30;
+            Main.rockLayer = Main.maxTilesY * 0.4;
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
@@ -368,12 +370,14 @@ namespace TheGoodTheBadAndTheIntoxicated
                     if (j >= Main.rockLayer)
                     {
                         tile.HasTile = true;
-                        tile.TileType = TileID.HardenedSand;
+                        tile.TileType = TileID.Sandstone;
+                        tile.WallType = WallID.Sandstone;
                     }
-                    else if (j >= Main.worldSurface)
+                    else if (j >= Main.worldSurface )
                     {
                         tile.HasTile = true;
                         tile.TileType = TileID.Sand;
+                        tile.WallType = WallID.HardenedSand;
                     }
                 }
             }
