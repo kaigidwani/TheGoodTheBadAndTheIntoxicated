@@ -18,6 +18,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.height = 24; // Hitbox height of the item.
             Item.scale = 1f;
             Item.rare = ItemRarityID.Green; // The color that the item's name will be in-game.
+            Item.value = Item.sellPrice(0, 1, 50, 0);
 
             // Use Properties
             Item.useTime = 45; // The item's use time in ticks (60 ticks == 1 second.)
