@@ -546,7 +546,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                     weaponAngles[i] = SmoothAngle(weaponAngles[i], (player.Center - NPC.Center - muzzles[i]).ToRotation(), 0.18f);
                 }
 
-                DrawGun(spriteBatch, weaponTextures[i], NPC.Center + muzzles[i] - screenPos, weaponAngles[i].ToRotationVector2(), scale);
+                DrawGun(spriteBatch, weaponTextures[i], NPC.Center + muzzles[i] - screenPos, weaponAngles[i].ToRotationVector2(), scale, drawColor);
             }
         }
 
@@ -618,11 +618,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             return new Vector2(tx * 16f + 8f, ty * 16f);
         }
 
-        private static void DrawGun(SpriteBatch spriteBatch, Texture2D tex, Vector2 worldOnScreen, Vector2 aimDir, float scale)
+        private static void DrawGun(SpriteBatch spriteBatch, Texture2D tex, Vector2 worldOnScreen, Vector2 aimDir, float scale, Color light)
         {
             float rot = aimDir.ToRotation();
             var fx = (aimDir.X < 0f) ? SpriteEffects.FlipVertically : SpriteEffects.None; // simple flip
-            spriteBatch.Draw(tex, worldOnScreen, null, Color.White, rot, tex.Size() * 0.5f, scale, fx, 0f);
+            spriteBatch.Draw(tex, worldOnScreen, null, light, rot, tex.Size() * 0.5f, scale, fx, 0f);
         }
 
         private void SpawnProjectile(Vector2 spawnPos, Vector2 velocity, short type, int damage, float knockback)
