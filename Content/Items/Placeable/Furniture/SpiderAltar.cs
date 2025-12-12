@@ -13,8 +13,8 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<SpiderAltarTile>());
-            Item.width = 48;
-            Item.height = 32;
+            Item.width = 32;
+            Item.height = 22;
             Item.value = 150;
         }
     }

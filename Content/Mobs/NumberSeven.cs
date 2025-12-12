@@ -4,10 +4,12 @@ using SubworldLibrary;
 using System;
 using Terraria;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using TheGoodTheBadAndTheIntoxicated.Content.Items;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
@@ -61,6 +63,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             }
 
             return 0f;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SixShooter>(), chanceDenominator: 8));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderCell>(), chanceDenominator: 20));
         }
 
         public override void AI()
