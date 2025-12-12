@@ -90,12 +90,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.height = 350;
             NPC.aiStyle = -1;
             NPC.damage = 8;
-            NPC.defense = -18;
+            NPC.defense = 18;
             NPC.lifeMax = 8888;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.HitSound = SoundID.NPCHit1;
-            NPC.HitSound = SoundID.NPCDeath1;
+            //NPC.HitSound = SoundID.NPCDeath1;
             NPC.value = 8888f;
 
             NPC.boss = true;
