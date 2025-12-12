@@ -91,14 +91,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.width = 200;
             NPC.height = 350;
             NPC.aiStyle = -1;
-            NPC.damage = 8;
-            NPC.defense = 18;
-            NPC.lifeMax = 8888;
+            NPC.damage = 28;
+            NPC.defense = 8;
+            NPC.lifeMax = 3850;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.HitSound = SoundID.NPCHit1;
             //NPC.HitSound = SoundID.NPCDeath1;
-            NPC.value = 8888f;
+            NPC.value = Item.buyPrice(0, 4, 8, 8); // Will drop 4 gold, 8 silver, and 8 copper
 
             NPC.boss = true;
         }
