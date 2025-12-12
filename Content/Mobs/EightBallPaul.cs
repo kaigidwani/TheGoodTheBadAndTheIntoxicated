@@ -1,20 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SubworldLibrary;
 using System;
 using System.Collections.Generic;
 using System.Formats.Tar;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
-using SubworldLibrary;
+using TheGoodTheBadAndTheIntoxicated.Content.Items;
 using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
@@ -99,6 +101,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = 8888f;
 
             NPC.boss = true;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TheRattler>(), chanceDenominator: 1));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Ale, chanceDenominator: 1));
         }
 
         public override void Load()
