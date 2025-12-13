@@ -60,7 +60,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 "Willy",
                 "Billy",
-                "Bob"
+                "Milly",
+                "Tilly",
+                "Gilly",
+                "Dilly",
+                "Killy"
             };
         }
 
@@ -125,7 +129,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         public override string GetChat()
         {
             NPC.FindFirstNPC(ModContent.NPCType<OldGunslinger>());
-            switch (Main.rand.Next(4))
+            switch (Main.rand.Next(6))
             {
                 case 0:
                     return "Interested in my wares?";
@@ -133,6 +137,10 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                     return "Nice gun you got there!  Want some more?";
                 case 2:
                     return "My shooting days are over, but I can make sure yours are not!";
+                case 3:
+                    return "Howdy, partner. What can I get you?";
+                case 4:
+                    return "Have you met my friend, the Arms Dealer?";
                 default:
                     return "(...could they be the one to take him down?)";
             }
