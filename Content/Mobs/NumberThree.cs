@@ -14,7 +14,7 @@ using TheGoodTheBadAndTheIntoxicated.Content.Items;
 
 namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
 {
-    internal class BottleBandit : ModNPC
+    internal class NumberThree : ModNPC
     {
         private enum ActionState
         {
@@ -53,6 +53,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
             NPC.DeathSound = SoundID.NPCDeath1; // The sound the NPC will make when it dies.
             NPC.value = 120.0f; // How many copper coins the NPC will drop when killed.
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The most unhinged of the Billiard Boys. They don't let him hold a gun for the safety of the gang."));
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

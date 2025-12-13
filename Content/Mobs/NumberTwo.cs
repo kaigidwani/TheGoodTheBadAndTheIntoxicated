@@ -54,6 +54,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = 120.0f; // How many copper coins the NPC will drop when killed.
         }
 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The calmest of the Billiard Boys. He's the only one Eight Ball Paul trusts with handling real business. You'll never see him coming, but you'll surely feel his presence."));
+        }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             // This NPC spawns when the player is in the mod subworld and the spawn position is underground.

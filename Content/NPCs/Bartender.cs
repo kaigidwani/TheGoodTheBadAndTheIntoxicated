@@ -1,8 +1,10 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TheGoodTheBadAndTheIntoxicated.Content.Items;
@@ -35,13 +37,24 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             AnimationType = 22; // same animation cycle as the guide
         }
 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The one and only bartender of the Tombstone Taphouse. He has nothing hiding in his cellar."));
+        }
+
         public override List<string> SetNPCNameList()
         {
             return new List<string>()
             {
-                "Willy",
-                "Billy",
-                "Bob"
+                "Bob",
+                "Hob",
+                "Rob",
+                "Dob",
+                "Fob",
+                "Gob",
+                "Nob",
+                "Pob"
             };
         }
 
@@ -58,10 +71,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 shop = "Shop";
             }
-            else
-            {
-                Main.npcChatText = "I'm so drunk";
-            }
+            // no other button, so no else
         }
 
         public override void AddShops()
@@ -78,8 +88,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         //picks a random piece of dialouge for the bartender to say
         public override string GetChat()
         {
-            NPC.FindFirstNPC(ModContent.NPCType<Bartender>());
-            switch (Main.rand.Next(4))
+            switch (Main.rand.Next(7))
             {
                 case 0:
                     return "Care for a drink?";
@@ -87,6 +96,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                     return "No skeletons in my basement!";
                 case 2:
                     return "Welcome to my humble saloon!";
+                case 3:
+                    return "Have you noticed anything off lately? Sometimes I think I hear the faint sounds of a pool game.";
+                case 4:
+                    return "Hmmph. Thought I heard some rattling downstairs.";
+                case 5:
+                    return "Do you know " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + "? I haven't seen them in ages.";
+                case 6:
+                    return "What can I get for ya?";
                 default:
                     return "I got some vintage brews for ya!";
             }

@@ -16,13 +16,5 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.CloneDefaults(ItemID.LeadShortsword);
             Item.shoot = ModContent.ProjectileType<BrokenBottleProjectile>();
         }
-
-		public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}
 	}
 }
