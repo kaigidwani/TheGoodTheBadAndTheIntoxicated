@@ -18,6 +18,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.height = 20; // Hitbox height of the item.
             Item.scale = 1f;
             Item.rare = ItemRarityID.LightRed; // The color that the item's name will be in-game.
+            Item.value = Item.sellPrice(0, 2, 0, 0); // This is the same value as the Bee Keeper, a Queen Bee weapon drop
 
             // Use Properties
             Item.useTime = 60; // The item's use time in ticks (60 ticks == 1 second.)

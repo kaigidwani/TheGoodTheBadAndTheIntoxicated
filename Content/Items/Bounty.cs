@@ -22,7 +22,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
             Item.mana = 70; // 20 mana = 1 container
             Item.knockBack = 0.0f; // no knockback
             Item.rare = ItemRarityID.Orange;
-            Item.value = Item.buyPrice(silver: 50);
+            Item.value = Item.sellPrice(0, 7, 0, 0);
             Item.UseSound = SoundID.Item20; // magic sound
             Item.noMelee = true; // doesn't do melee damage
             Item.shoot = ModContent.ProjectileType<BountyProjectile>(); // shoots a custom bounty projectile
