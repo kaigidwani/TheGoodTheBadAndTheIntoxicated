@@ -128,7 +128,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         //picks a random piece of dialouge for the gunslinger to say
         public override string GetChat()
         {
-            NPC.FindFirstNPC(ModContent.NPCType<OldGunslinger>());
             switch (Main.rand.Next(6))
             {
                 case 0:
