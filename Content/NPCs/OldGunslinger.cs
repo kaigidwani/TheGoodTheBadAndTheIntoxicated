@@ -67,7 +67,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 "Willy",
                 "Billy",
-                "Bob"
+                "Milly",
+                "Tilly",
+                "Gilly",
+                "Dilly",
+                "Killy"
             };
         }
 
@@ -109,9 +113,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 index++;
             }
-
-            // gunslinger sells new guns when paul is defeated (FOR NOW, IT CHECKS IF CITHULU IS DEAD)
-            if (NPC.downedBoss1) //BossSystem.paulDead
+            Console.WriteLine("Paul dead: " + BossSystem.paulDead);
+            // gunslinger sells new guns when paul is defeated
+            if (BossSystem.paulDead)
             {
                 items[index] = new Item();
                 items[index].SetDefaults(ModContent.ItemType<TheRattler>());
@@ -119,14 +123,19 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 items[index + 1].SetDefaults(ModContent.ItemType<LeverAction>());
                 items[index + 2] = new Item();
                 items[index + 2].SetDefaults(ModContent.ItemType<BrokenBottle>());
+                items[index + 3] = new Item();
+                items[index + 3].SetDefaults(ModContent.ItemType<Bounty>());
+                items[index + 4] = new Item();
+                items[index + 4].SetDefaults(ModContent.ItemType<SixShooter>());
+                items[index + 5] = new Item();
+                items[index + 5].SetDefaults(ModContent.ItemType<BoltAction>());
             }
         }
 
         //picks a random piece of dialouge for the gunslinger to say
         public override string GetChat()
         {
-            NPC.FindFirstNPC(ModContent.NPCType<OldGunslinger>());
-            switch (Main.rand.Next(4))
+            switch (Main.rand.Next(6))
             {
                 case 0:
                     return "Interested in my wares?";
@@ -134,8 +143,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                     return "Nice gun you got there!  Want some more?";
                 case 2:
                     return "My shooting days are over, but I can make sure yours are not!";
+                case 3:
+                    return "Howdy, partner. What can I get you?";
+                case 4:
+                    return "Have you met my friend, " + NPCHelper.GetNPCGivenName(NPCID.ArmsDealer) + "?";
                 default:
-                    return "(...could they be the one to take them down?)";
+                    return "(...could they be the one to take him down?)";
             }
         }
 
