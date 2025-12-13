@@ -34,7 +34,8 @@ namespace TheGoodTheBadAndTheIntoxicated
 
     public class TheGoodTheBadAndTheIntoxicatedSystem : ModSystem
     {
-        public override void OnWorldLoad()
+        // Should no longer be necessary
+        /*public override void OnWorldLoad()
         {
             // Making sure this only works on my building world
             if (Main.worldName == "Dungeon Expansion")
@@ -80,7 +81,7 @@ namespace TheGoodTheBadAndTheIntoxicated
 
                 Console.WriteLine("updated the files");
             }
-        }
+        }*/
     }
 
     /// <summary>
