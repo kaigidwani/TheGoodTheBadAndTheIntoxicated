@@ -54,6 +54,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = 120.0f; // How many copper coins the NPC will drop when killed.
         }
 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The loudest of the Billiard Boys. He views the others as being too wimpy to handle real weaponry. The rest of the gang just don't like bolt-actions."));
+        }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             // This NPC spawns when the player is in the mod subworld and the spawn position is underground.

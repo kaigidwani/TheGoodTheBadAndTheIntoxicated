@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
@@ -101,6 +102,13 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = Item.buyPrice(0, 4, 8, 8); // Will drop 4 gold, 8 silver, and 8 copper
 
             NPC.boss = true;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The leader of the Billiard Boys and the meanest eight legged varmint this side of the sea. " +
+                "Legend tells the tale of a mysterious wanderer, sent by an old man, who will finally sink Paul into a six-foot deep pocket and bring honor back to these dreaded wastes."));
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

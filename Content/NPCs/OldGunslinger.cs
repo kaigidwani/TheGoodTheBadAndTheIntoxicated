@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TheGoodTheBadAndTheIntoxicated.Content.Items;
@@ -34,6 +35,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
             NPCID.Sets.AttackAverageChance[NPC.type] = 5; // the chance the NPC attacks when it is supposed to
             AnimationType = 22; // same animation cycle as the guide
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("One of the original Billiard Boys, he now searches for a wanderer who is destined to take the gang down once and for all."));
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs)

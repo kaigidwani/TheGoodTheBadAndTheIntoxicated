@@ -68,16 +68,5 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
                 }
             }
         }
-
-
-        public override void AddRecipes()
-        {
-            // TODO: Remove recipe and make it sold by NPC
-
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 2);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.Register();
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
                 // They can spawn only in the dungeon
                 if (spawnInfo.SpawnTileY > Main.worldSurface)
                 {
-                    pool[ModContent.NPCType<BottleBandit>()] = 1.0f;   // Higher weight for basic enemy
+                    pool[ModContent.NPCType<NumberThree>()] = 1.0f;   // Higher weight for basic enemy
                     pool[ModContent.NPCType<NumberFourteen>()] = 0.5f;
                     pool[ModContent.NPCType<NumberSeven>()] = 0.5f;
                     pool[ModContent.NPCType<NumberTwo>()] = 0.5f;
