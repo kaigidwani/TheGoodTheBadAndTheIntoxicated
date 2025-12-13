@@ -55,7 +55,11 @@ Items: {
 
 	Bounty: {
 		DisplayName: Bounty
-		Tooltip: ""
+		Tooltip:
+			'''
+			'Mark enemies for death, 
+			making them take more damage.'
+			'''
 
 		TrapdoorKey: {
 			Tooltip: ""
@@ -252,6 +256,9 @@ NPCs: {
 	}
 
 	EightBallPaul.DisplayName: Eight Ball Paul
+	NumberFourteen.DisplayName: Number Fourteen
+	NumberTwo.DisplayName: Number Two
+	NumberSeven.DisplayName: Number Seven
 }
 
 Projectiles: {

@@ -18,11 +18,11 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 
         public override void SetDefaults()
         {
-            Item.width = 32;
-            Item.height = 32;
+            Item.width = 50;
+            Item.height = 50;
             Item.maxStack = 999;
             Item.rare = ItemRarityID.Orange;
-            Item.value = Item.sellPrice(silver: 50);
+            Item.value = Item.sellPrice(silver: 88);
             Item.consumable = true;
             Item.useStyle = ItemUseStyleID.None; // not used directly
         }
