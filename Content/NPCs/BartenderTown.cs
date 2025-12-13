@@ -100,7 +100,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 case 1:
                     return "Thanks for taking care of my pest problem!";
                 case 2:
-                    return "Finally, the Barkeep and I are reunited!";
+                    return "Finally, " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + " and I are reunited!";
                 case 3:
                     return "What can I get for ya?";
                 default:

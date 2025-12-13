@@ -140,7 +140,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 case 3:
                     return "Howdy, partner. What can I get you?";
                 case 4:
-                    return "Have you met my friend, the Arms Dealer?";
+                    return "Have you met my friend, " + NPCHelper.GetNPCGivenName(NPCID.ArmsDealer) + "?";
                 default:
                     return "(...could they be the one to take him down?)";
             }

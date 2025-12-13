@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -94,7 +95,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 case 4:
                     return "Hmmph. Thought I heard some rattling downstairs.";
                 case 5:
-                    return "Do you know the Barkeep? I haven't seen them in ages.";
+                    return "Do you know " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + "? I haven't seen them in ages.";
                 case 6:
                     return "What can I get for ya?";
                 default:
