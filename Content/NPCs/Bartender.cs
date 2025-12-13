@@ -58,10 +58,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 shop = "Shop";
             }
-            else
-            {
-                Main.npcChatText = "I'm so drunk";
-            }
+            // no other button, so no else
         }
 
         public override void AddShops()

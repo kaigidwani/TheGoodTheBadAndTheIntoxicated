@@ -102,9 +102,9 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 index++;
             }
-
-            // gunslinger sells new guns when paul is defeated (FOR NOW, IT CHECKS IF CITHULU IS DEAD)
-            if (NPC.downedBoss1) //BossSystem.paulDead
+            Console.WriteLine("Paul dead: " + BossSystem.paulDead);
+            // gunslinger sells new guns when paul is defeated
+            if (BossSystem.paulDead)
             {
                 items[index] = new Item();
                 items[index].SetDefaults(ModContent.ItemType<TheRattler>());
@@ -112,6 +112,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 items[index + 1].SetDefaults(ModContent.ItemType<LeverAction>());
                 items[index + 2] = new Item();
                 items[index + 2].SetDefaults(ModContent.ItemType<BrokenBottle>());
+                items[index + 3] = new Item();
+                items[index + 3].SetDefaults(ModContent.ItemType<Bounty>());
+                items[index + 4] = new Item();
+                items[index + 4].SetDefaults(ModContent.ItemType<SixShooter>());
+                items[index + 5] = new Item();
+                items[index + 5].SetDefaults(ModContent.ItemType<BoltAction>());
             }
         }
 
@@ -128,7 +134,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
                 case 2:
                     return "My shooting days are over, but I can make sure yours are not!";
                 default:
-                    return "(...could they be the one to take them down?)";
+                    return "(...could they be the one to take him down?)";
             }
         }
 
