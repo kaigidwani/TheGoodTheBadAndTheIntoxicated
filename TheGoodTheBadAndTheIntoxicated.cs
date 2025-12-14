@@ -34,10 +34,9 @@ namespace TheGoodTheBadAndTheIntoxicated
 
     public class TheGoodTheBadAndTheIntoxicatedSystem : ModSystem
     {
-        // Should no longer be necessary
-        /*public override void OnWorldLoad()
+        public override void OnWorldLoad()
         {
-            // Making sure this only works on my building world
+            /*// Making sure this only works on my building world
             if (Main.worldName == "Dungeon Expansion")
             {
                 // Deleting the old .shstruct files
@@ -80,8 +79,8 @@ namespace TheGoodTheBadAndTheIntoxicated
                 StructureHelper.API.Saver.SaveToFile(dungeonData, dungeonFilePath.Replace(".shstruct", ""));
 
                 Console.WriteLine("updated the files");
-            }
-        }*/
+            }*/
+        }
     }
 
     /// <summary>
@@ -115,7 +114,18 @@ namespace TheGoodTheBadAndTheIntoxicated
         public override int Width => 1500;
         public override int Height => 1500;
 
-        public override bool ShouldSave => false;
+        // Does subworld changes get saved when players leave?
+        //  True = Save the subworld data changes
+        //  False = Delete the subworld data changes
+        // *Note:   Setting this to true causes the subworld to not load
+        //          when entering from other worlds. We are setting this to false
+        //          so that it works until we find a solution. This means that players
+        //          can abuse this by farming loot from chests
+        public override bool ShouldSave => false; 
+
+        // Does player changes get DELETED when players leave?
+        //   True = Delete the player data changes
+        //   False = Save the player data changes
         public override bool NoPlayerSaving => false;
 
         public override List<GenPass> Tasks => new List<GenPass>()
