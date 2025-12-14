@@ -1,0 +1,192 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using SubworldLibrary;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
+using TheGoodTheBadAndTheIntoxicated.Content.Items;
+
+namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
+{
+    internal class NumberThree : ModNPC
+    {
+        private enum ActionState
+        {
+            Idle,
+            Notice,
+            Attack
+        }
+
+        private const float noticeRange = 600.0f;
+        private const float attackRange = 100.0f;
+
+        private const float walkSpeed = 1.5f;
+        private const float lungeSpeed = 20.0f;
+        private const int attackCD = 120;
+
+        private const int frameCount = 15;
+
+        public ref float AI_State => ref NPC.ai[0];
+        public ref float AI_Timer => ref NPC.localAI[0];
+
+        public static LocalizedText GotStompedText { get; private set; }
+
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[Type] = frameCount;
+        }
+
+        public override void SetDefaults()
+        {
+            NPC.width = 20; // The width of the npc's hitbox (in pixels)
+            NPC.height = 50; // The height of the npc's hitbox (in pixels)
+            NPC.aiStyle = -1; // This npc has a completely unique AI, so we set this to -1.
+            NPC.damage = 20; // The amount of damage that this npc deals
+            NPC.defense = 4; // The amount of defense that this npc has
+            NPC.lifeMax = 80; // The amount of health that this npc has
+            NPC.HitSound = SoundID.NPCHit1; // The sound the NPC will make when being hit.
+            NPC.DeathSound = SoundID.NPCDeath1; // The sound the NPC will make when it dies.
+            NPC.value = 120.0f; // How many copper coins the NPC will drop when killed.
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("The most unhinged of the Billiard Boys. They don't let him hold a gun for the safety of the gang."));
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            // This NPC spawns when the player is in the mod subworld and the spawn position is underground.
+            if (SubworldSystem.IsActive<BarSubworld>() && spawnInfo.SpawnTileY > Main.worldSurface)
+            {
+                return 10f;
+            }
+
+            return 0f;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BrokenBottle>(), chanceDenominator: 8));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderCell>(), chanceDenominator: 20));
+        }
+
+        public override void AI()
+        {
+            if (AI_Timer > 0.0f)
+            {
+                AI_Timer--;
+            }
+
+            switch (AI_State)
+            {
+                case (float)ActionState.Idle:
+                    Idle();
+                    break;
+                case (float)ActionState.Notice:
+                    Notice();
+                    break;
+                case (float)ActionState.Attack:
+                    Attack();
+                    break;
+            }
+        }
+
+        private void Idle()
+        {
+            NPC.velocity.X = 0.0f;
+
+            NPC.TargetClosest(true);
+
+            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < noticeRange)
+            {
+                AI_State = (float)ActionState.Notice;
+            }
+        }
+
+        private void Notice()
+        {
+            // If the targeted player is in attack range,
+            // and this NPC is done with its attack cooldown,
+            // we can enter the Attack state.
+            if (Main.player[NPC.target].Distance(NPC.Center) < attackRange && AI_Timer <= 0.0f)
+            {
+                AI_State = (float)ActionState.Attack;
+            }
+            else
+            {
+                NPC.TargetClosest(true);
+
+                if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > noticeRange)
+                {
+                    // Out targeted player seems to have left our range, so we'll go back to sleep.
+                    AI_State = (float)ActionState.Idle;
+                }
+                else
+                {
+                    // Face the player
+                    int faceDir = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
+                    NPC.direction = faceDir;
+                    NPC.spriteDirection = faceDir;
+
+                    // Move towards player
+                    float targetSpeed = faceDir * walkSpeed;
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, targetSpeed, 0.1f);
+
+                    // Do a tiny hop over a ledge or slope
+                    if (NPC.velocity.Y == 0f && NPC.collideX)
+                    {
+                        NPC.velocity.Y = -6f;
+                    }
+                }
+            }
+        }
+
+        private void Attack()
+        {
+            Vector2 direction = Main.player[NPC.target].Center - NPC.Center;
+            direction.Normalize();
+
+            // Lunge towards the player with a speed based on distance
+            NPC.velocity = direction * (lungeSpeed * MathHelper.Clamp(Main.player[NPC.target].Distance(NPC.Center) / 200f, 0.4f, 1f));
+
+            AI_State = (float)ActionState.Notice;
+            AI_Timer = attackCD;
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.spriteDirection = NPC.direction;
+
+            switch (AI_State)
+            {
+                case (float)ActionState.Idle:
+                    NPC.frameCounter = 0;
+                    NPC.frame.Y = 0;
+                    break;
+                case (float)ActionState.Notice:
+                case (float)ActionState.Attack:
+                    NPC.frameCounter++;
+
+                    if (NPC.frameCounter >= 3)
+                    {
+                        NPC.frameCounter = 0;
+                        NPC.frame.Y += frameHeight;
+
+                        int lastFrameY = (frameCount - 1) * frameHeight;
+                        if (NPC.frame.Y > lastFrameY)
+                            NPC.frame.Y = 0;
+                    }
+
+                    break;
+            }
+        }
+    }
+}

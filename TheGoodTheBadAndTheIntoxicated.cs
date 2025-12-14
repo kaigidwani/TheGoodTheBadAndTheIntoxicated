@@ -21,6 +21,8 @@ using TheGoodTheBadAndTheIntoxicated.Content.Furniture;
 using Microsoft.Build.Tasks;
 using TheGoodTheBadAndTheIntoxicated.Content.Items.Placeable.Furniture;
 using System.Net.Sockets;
+using Terraria.GameContent.Personalities;
+using Terraria.GameContent.Biomes;
 
 namespace TheGoodTheBadAndTheIntoxicated
 {
@@ -70,7 +72,7 @@ namespace TheGoodTheBadAndTheIntoxicated
 
                 // Using coordinates from TEdit to automatically overwrite all saved structures,
                 // instead of doing it manually in game
-                StructureHelper.Models.StructureData saloonData = StructureHelper.API.Saver.SaveToStructureData(2029, 318, (2097 - 2029), (358-318));
+                StructureHelper.Models.StructureData saloonData = StructureHelper.API.Saver.SaveToStructureData(2028, 318, (2098 - 2028), (358 - 318));
                 StructureHelper.API.Saver.SaveToFile(saloonData, saloonFilepath.Replace(".shstruct", ""));
 
                 StructureHelper.Models.StructureData dungeonData = StructureHelper.API.Saver.SaveToStructureData(2042, 357, (2230 - 2042), (459 - 357));
@@ -109,8 +111,8 @@ namespace TheGoodTheBadAndTheIntoxicated
 
         }
 
-        public override int Width => 1000;
-        public override int Height => 1000;
+        public override int Width => 1500;
+        public override int Height => 1500;
 
         public override bool ShouldSave => false;
         public override bool NoPlayerSaving => false;
@@ -319,7 +321,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                     DungeonOrigin.X + key.Value.X,
                     DungeonOrigin.Y + key.Value.Y);
                 }
-                
+
 
                 // Note that in TEdit, the marker has to be placed
                 // next to at least one tile that it should be replaced with
@@ -356,7 +358,7 @@ namespace TheGoodTheBadAndTheIntoxicated
         {
             progress.Message = "Generating terrain"; // Sets the text displayed for this pass
             Main.worldSurface = Main.maxTilesY * 0.25;
-            Main.rockLayer = Main.maxTilesY * 0.30;
+            Main.rockLayer = Main.maxTilesY * 0.4;
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
@@ -368,12 +370,16 @@ namespace TheGoodTheBadAndTheIntoxicated
                     if (j >= Main.rockLayer)
                     {
                         tile.HasTile = true;
-                        tile.TileType = TileID.HardenedSand;
+                        tile.TileType = TileID.Sandstone;
+                        tile.WallType = WallID.Sandstone;
                     }
                     else if (j >= Main.worldSurface)
                     {
                         tile.HasTile = true;
                         tile.TileType = TileID.Sand;
+
+                        if (j != Main.worldSurface)
+                        tile.WallType = WallID.HardenedSand;
                     }
                 }
             }

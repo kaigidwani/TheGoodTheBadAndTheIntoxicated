@@ -1,16 +1,6 @@
 # This file will automatically update with entries for new content after a build and reload.
 
 Items: {
-	SpaghettiWesternSword: {
-		DisplayName: Spaghetti Western Sword
-		Tooltip:
-			'''
-			Template of an item
-			Replacing this tooltip is duty 
-			It's snowing on Mt.Fuji
-			'''
-	}
-
 	BarMap: {
 		DisplayName: Bar Map
 		Tooltip:
@@ -55,7 +45,7 @@ Items: {
 
 	BrokenBottle: {
 		DisplayName: Broken Bottle
-		Tooltip: "'What you egg?!'"
+		Tooltip: "'What, you egg?'"
 	}
 
 	Trapdoor: {
@@ -67,128 +57,19 @@ Items: {
 		DisplayName: Bounty
 		Tooltip:
 			'''
-			'Mark enemies for death, 
-			making them take more damage.'
+			Shoots homing skulls
+			Hit enemies take more damage for a few seconds
+			'Marked for death'
 			'''
-
-		TrapdoorKey: {
-			Tooltip: ""
-			DisplayName: Trapdoor Key
-		}
-
-		SaloonTrapdoorKey: {
-			DisplayName: Saloon Trapdoor Key
-			Tooltip:
-				'''
-				A key with an 8-Ball at the top.
-				It must go to something nearby...
-				'''
-		}
-	}
-
-	NPCs: {
-		Bartender: {
-			TownNPCMood: {
-				Content: I am content.
-				NoHome: I hate not having a home.
-				FarFromHome: I am too far from home.
-				LoveSpace: I love having so much space.
-				DislikeCrowded: I dislike how crowded I am.
-				HateCrowded: I hate how crowded I am.
-				LikeNPC_Princess: I like {NPCName}.
-				Princess_LovesNPC: I like {NPCName}.
-			}
-
-			DisplayName: Bartender
-		}
-
-		Old_Gunslinger: {
-			DisplayName: Old_ Gunslinger
-
-			TownNPCMood: {
-				Content: I am content.
-				NoHome: I hate not having a home.
-				FarFromHome: I am too far from home.
-				LoveSpace: I love having so much space.
-				DislikeCrowded: I dislike how crowded I am.
-				HateCrowded: I hate how crowded I am.
-				LikeNPC_Princess: I like {NPCName}.
-				Princess_LovesNPC: I like {NPCName}.
-			}
-		}
-
-		OldGunslinger: {
-			DisplayName: Old Gunslinger
-
-			TownNPCMood: {
-				Content: I am content.
-				NoHome: I hate not having a home.
-				FarFromHome: I am too far from home.
-				LoveSpace: I love having so much space.
-				DislikeCrowded: I dislike how crowded I am.
-				HateCrowded: I hate how crowded I am.
-				LikeNPC_Princess: I like {NPCName}.
-				Princess_LovesNPC: I like {NPCName}.
-			}
-		}
-
-		BottleBandit.DisplayName: Bottle Bandit
-
-		LeverAction: {
-			DisplayName: Lever Action
-			Tooltip: ""
-		}
-
-		TestGun: {
-			DisplayName: Test Gun
-			Tooltip: ""
-		}
-
-		TheRattler: {
-			DisplayName: The Rattler
-			Tooltip: ""
-		}
-
-		BartenderTown: {
-			DisplayName: Bartender
-
-			TownNPCMood: {
-				Content: I am content.
-				NoHome: I hate not having a home.
-				FarFromHome: I am too far from home.
-				LoveSpace: I love having so much space.
-				DislikeCrowded: I dislike how crowded I am.
-				HateCrowded: I hate how crowded I am.
-				LikeNPC_Princess: I like {NPCName}.
-				Princess_LovesNPC: I like {NPCName}.
-			}
-		}
-	}
-
-	Projectiles: {
-		BountyProjectile.DisplayName: Bounty Projectile
-		BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
-	}
-
-	Buffs: {
-		Marked: {
-			DisplayName: Marked
-			Description: Mods.TheGoodTheBadAndTheIntoxicated.Buffs.Marked.Description
-		}
-	}
-
-	Tiles: {
-		LockedTrapdoor.MapEntry: Locked Trapdoor
-		SaloonTrapdoor.MapEntry: Saloon Trapdoor
-		SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
-		SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
-		SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
-		SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
 	}
 
 	SaloonTrapdoorKey: {
 		DisplayName: Saloon Trapdoor Key
-		Tooltip: ""
+		Tooltip:
+			'''
+			A key with an 8-Ball at the top.
+			It must go to something nearby...
+			'''
 	}
 
 	SpiderCell: {
@@ -202,12 +83,9 @@ Items: {
 	}
 }
 
-Tiles: {
-	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
-	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
-	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
-	SpiderAltar.MapEntry: Spider Altar
-	SpiderAltarTile.MapEntry: Spider Altar Tile
+Projectiles: {
+	BountyProjectile.DisplayName: Bounty Projectile
+	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
 }
 
 Buffs: {
@@ -217,9 +95,18 @@ Buffs: {
 	}
 }
 
-NPCs: {
-	BottleBandit.DisplayName: Bottle Bandit
+Tiles: {
+	LockedTrapdoor.MapEntry: Locked Trapdoor
+	SaloonTrapdoor.MapEntry: Saloon Trapdoor
+	SaloonTrapdoorClosed.MapEntry: Saloon Trapdoor Closed
+	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
+	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
+	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
+	SpiderAltar.MapEntry: Spider Altar
+	SpiderAltarTile.MapEntry: Spider Altar Tile
+}
 
+NPCs: {
 	Bartender: {
 		DisplayName: Bartender
 
@@ -266,10 +153,8 @@ NPCs: {
 	}
 
 	EightBallPaul.DisplayName: Eight Ball Paul
-}
-
-Projectiles: {
-	BountyProjectile.DisplayName: Bounty Projectile
-	BulletTest.DisplayName: Bullet Test
-	BrokenBottleProjectile.DisplayName: Broken Bottle Projectile
+	NumberFourteen.DisplayName: Number Fourteen
+	NumberTwo.DisplayName: Number Two
+	NumberSeven.DisplayName: Number Seven
+	NumberThree.DisplayName: Number Three
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TheGoodTheBadAndTheIntoxicated.Content.Items;
@@ -35,6 +36,12 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             AnimationType = 22; // same animation cycle as the guide
         }
 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("The man who used to be the bartender for the Tombstone Taphouse. Looking to make a new name for himself."));
+        }
+
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
             // if any player has the rattler in their inventory, the NPC can spawn
@@ -53,9 +60,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         {
             return new List<string>()
             {
-                "Willy",
-                "Billy",
-                "Bob"
+                "Bob",
+                "Hob",
+                "Rob",
+                "Dob",
+                "Fob",
+                "Gob",
+                "Nob",
+                "Pob"
             };
         }
 
@@ -84,18 +96,19 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             shop.Register();
         }
 
-        //picks a random piece of dialouge for the gunslinger to say
+        //picks a random piece of dialouge for the bartender to say
         public override string GetChat()
         {
-            NPC.FindFirstNPC(ModContent.NPCType<OldGunslinger>());
-            switch (Main.rand.Next(4))
+            switch (Main.rand.Next(5))
             {
                 case 0:
                     return "Care for a drink?";
                 case 1:
-                    return "No hard feelings, right?";
+                    return "Thanks for taking care of my pest problem!";
                 case 2:
-                    return "The gig's up!";
+                    return "Finally, " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + " and I are reunited!";
+                case 3:
+                    return "What can I get for ya?";
                 default:
                     return "I got some vintage brews for ya!";
             }
