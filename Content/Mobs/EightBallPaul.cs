@@ -102,6 +102,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.value = Item.buyPrice(0, 4, 8, 8); // Will drop 4 gold, 8 silver, and 8 copper
 
             NPC.boss = true;
+            NPC.HitSound = SoundID.NPCDeath1;
+            NPC.value = 8888f;
+
+            NPC.boss = true;
+            if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/8-Ball-Paul");
+            }
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
