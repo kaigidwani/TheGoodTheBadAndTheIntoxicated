@@ -61,7 +61,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Mobs
             NPC.boss = true;
             if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/Boss");
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/8-Ball-Paul");
             }
         }
 
