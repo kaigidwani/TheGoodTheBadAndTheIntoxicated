@@ -36,7 +36,7 @@ namespace TheGoodTheBadAndTheIntoxicated
     {
         public override void OnWorldLoad()
         {
-            // Making sure this only works on my building world
+            /*// Making sure this only works on my building world
             if (Main.worldName == "Dungeon Expansion")
             {
                 // Deleting the old .shstruct files
@@ -79,7 +79,7 @@ namespace TheGoodTheBadAndTheIntoxicated
                 StructureHelper.API.Saver.SaveToFile(dungeonData, dungeonFilePath.Replace(".shstruct", ""));
 
                 Console.WriteLine("updated the files");
-            }
+            }*/
         }
     }
 
