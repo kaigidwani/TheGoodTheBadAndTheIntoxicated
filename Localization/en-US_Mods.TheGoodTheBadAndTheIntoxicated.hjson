@@ -73,12 +73,16 @@ Items: {
 	}
 
 	SpiderCell: {
-		DisplayName: Spider Cell
-		Tooltip: ""
+		DisplayName: Magic 8-Ball
+		Tooltip: 
+			'''
+			Used at the Pool Table
+			"Stop shaking me! I don't predict things!"
+			'''
 	}
 
 	SpiderAltar: {
-		DisplayName: Spider Altar
+		DisplayName: Pool Table
 		Tooltip: ""
 	}
 }
@@ -102,8 +106,8 @@ Tiles: {
 	SaloonTrapdoorOpen.MapEntry: Saloon Trapdoor Open
 	SaloonTrapdoorClosed_Locked.MapEntry: Saloon Trapdoor Closed_ Locked
 	SaloonTrapdoorClosed_Unlocked.MapEntry: Saloon Trapdoor Closed_ Unlocked
-	SpiderAltar.MapEntry: Spider Altar
-	SpiderAltarTile.MapEntry: Spider Altar Tile
+	SpiderAltar.MapEntry: Pool Table
+	SpiderAltarTile.MapEntry: Pool Table
 }
 
 NPCs: {
