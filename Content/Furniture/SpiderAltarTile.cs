@@ -43,7 +43,7 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Furniture
             if (!player.HasItem(cellType))
             {
                 if (Main.myPlayer == player.whoAmI)
-                    Main.NewText("You need a Spider Cell.", 200, 100, 180);
+                    Main.NewText("You need a Magic 8-Ball.", 200, 100, 180);
                 return true;
             }
 

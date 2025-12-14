@@ -74,7 +74,7 @@ Items: {
 
 	SpiderCell: {
 		DisplayName: Magic 8-Ball
-		Tooltip: 
+		Tooltip:
 			'''
 			Used at the Pool Table
 			"Stop shaking me! I don't predict things!"
