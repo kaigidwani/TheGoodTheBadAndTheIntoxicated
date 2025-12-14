@@ -113,9 +113,23 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 index++;
             }
+
+            // Bool for if the player has the rattler and Paul has been defeated
+            bool hasRattler = false;
+
+            // if any player has the rattler in their inventory, the NPC can spawn
+            for (var i = 0; i < 255; i++)
+            {
+                Player player = Main.player[i];
+                if (player.HasItem(ModContent.ItemType<TheRattler>()))
+                {
+                    hasRattler = true;
+                }
+            }
+
             Console.WriteLine("Paul dead: " + BossSystem.paulDead);
-            // gunslinger sells new guns when paul is defeated
-            if (BossSystem.paulDead)
+            // gunslinger sells new guns when a player has the rattler
+            if (hasRattler)
             {
                 items[index] = new Item();
                 items[index].SetDefaults(ModContent.ItemType<TheRattler>());
