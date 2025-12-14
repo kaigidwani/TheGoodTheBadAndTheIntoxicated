@@ -1,7 +1,6 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -13,23 +12,23 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 {
     // loads the head icon above the NPC when they talk
     [AutoloadHead]
-    public class Bartender : ModNPC
+    public class BartenderTown : ModNPC
     {
         public override void SetDefaults()
         {
-            NPC.townNPC = true; // they stay at the bar, but needs to be true so they can be traded with
+            NPC.townNPC = true; // they come to the town
             NPC.friendly = true; // they are chill
             NPC.width = 20; // standard width
             NPC.height = 20; // standard height
-            NPC.aiStyle = 0; // faces the player, does nothing else
+            NPC.aiStyle = 7; // standard town NPC AI
             NPC.defense = 20; // good defense
             NPC.lifeMax = 250; // average life
             NPC.HitSound = SoundID.NPCHit1; // basic npc hurt sound
             NPC.DeathSound = SoundID.NPCDeath1; // basic npc death sound
             NPC.knockBackResist = 0.5f;
             Main.npcFrameCount[NPC.type] = 25; // the number of frames of the NPC animation
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 4; // they have a greeting
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4; // the NPC holds their weapon out when they attack
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 0; // change this if we have any special attacks 
+            NPCID.Sets.AttackFrameCount[NPC.type] = 2; // the NPC holds their weapon out when they attack
             NPCID.Sets.DangerDetectRange[NPC.type] = 500; // the range in pixels the NPC can detect danger
             NPCID.Sets.AttackType[NPC.type] = 1; // attacks with a gun
             NPCID.Sets.AttackTime[NPC.type] = 40; // attacks every 40 ticks
@@ -39,8 +38,22 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-                new FlavorTextBestiaryInfoElement("The one and only bartender of the Tombstone Taphouse. He has nothing hiding in his cellar."));
+            bestiaryEntry.AddTags(BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("The man who used to be the bartender for the Tombstone Taphouse. Looking to make a new name for himself."));
+        }
+
+        public override bool CanTownNPCSpawn(int numTownNPCs)
+        {
+            // if any player has the rattler in their inventory, the NPC can spawn
+            for (var i = 0; i < 255; i++)
+            {
+                Player player = Main.player[i];
+                if (player.HasItem(ModContent.ItemType<TheRattler>()))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override List<string> SetNPCNameList()
@@ -71,16 +84,14 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
             {
                 shop = "Shop";
             }
-            // no other button, so no else
         }
 
         public override void AddShops()
         {
             NPCShop shop = new NPCShop(NPC.type, "Shop")
                 .Add(ItemID.Ale)
-                .Add(ItemID.Mug)
                 .Add(ItemID.Keg)
-                .Add(ModContent.ItemType<SaloonTrapdoorKey>());
+                .Add(ItemID.AleThrowingGlove);
 
             shop.Register();
         }
@@ -88,25 +99,36 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.NPCs
         //picks a random piece of dialouge for the bartender to say
         public override string GetChat()
         {
-            switch (Main.rand.Next(7))
+            switch (Main.rand.Next(5))
             {
                 case 0:
                     return "Care for a drink?";
                 case 1:
-                    return "No skeletons in my basement!";
+                    return "Thanks for taking care of my pest problem!";
                 case 2:
-                    return "Welcome to my humble saloon!";
+                    return "Finally, " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + " and I are reunited!";
                 case 3:
-                    return "Have you noticed anything off lately? Sometimes I think I hear the faint sounds of a pool game.";
-                case 4:
-                    return "Hmmph. Thought I heard some rattling downstairs.";
-                case 5:
-                    return "Do you know " + NPCHelper.GetNPCGivenName(NPCID.DD2Bartender) + "? I haven't seen them in ages.";
-                case 6:
                     return "What can I get for ya?";
                 default:
                     return "I got some vintage brews for ya!";
             }
+        }
+
+        public override void TownNPCAttackStrength(ref int damage, ref float knockback)
+        {
+            damage = 15;
+            knockback = 2f;
+        }
+
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
+        {
+            projType = ProjectileID.Ale; // he throws ale at enemies
+            attackDelay = 1; // he got fast hands
+        }
+
+        public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
+        {
+            multiplier = 10f; // same velocity as the throwing glove ale projectile
         }
 
         public override void OnKill()

@@ -13,10 +13,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
 	{
         // The Display Name and Tooltip of this item can be edited in the 'Localization/en-US_Mods.TestDimensionMod.hjson' file.
 
-        // TODO: Change to be a custom sprite
-
-        public override string Texture => $"Terraria/Images/Item_{ItemID.PirateMap}"; // Copies the texture for the Ice Mirror, make your own texture if need be.
-
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.IceMirror); // Copies the defaults from the Ice Mirror.
@@ -71,17 +67,6 @@ namespace TheGoodTheBadAndTheIntoxicated.Content.Items
                     Dust.NewDust(player.position, player.width, player.height, DustID.MagicMirror, 0f, 0f, 150, default, 1.5f);
                 }
             }
-        }
-
-
-        public override void AddRecipes()
-        {
-            // TODO: Remove recipe and make it sold by NPC
-
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 2);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.Register();
         }
     }
 }
