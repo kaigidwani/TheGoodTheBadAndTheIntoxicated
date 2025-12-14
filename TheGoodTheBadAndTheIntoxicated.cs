@@ -117,7 +117,11 @@ namespace TheGoodTheBadAndTheIntoxicated
         // Does subworld changes get saved when players leave?
         //  True = Save the subworld data changes
         //  False = Delete the subworld data changes
-        public override bool ShouldSave => true;
+        // *Note:   Setting this to true causes the subworld to not load
+        //          when entering from other worlds. We are setting this to false
+        //          so that it works until we find a solution. This means that players
+        //          can abuse this by farming loot from chests
+        public override bool ShouldSave => false; 
 
         // Does player changes get DELETED when players leave?
         //   True = Delete the player data changes
