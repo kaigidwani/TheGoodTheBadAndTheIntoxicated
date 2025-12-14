@@ -114,7 +114,14 @@ namespace TheGoodTheBadAndTheIntoxicated
         public override int Width => 1500;
         public override int Height => 1500;
 
+        // Does subworld changes get saved when players leave?
+        //  True = Save the subworld changes
+        //  False = Delete the subworld changes
         public override bool ShouldSave => false;
+
+        // Does player changes get DELETED when players leave?
+        //   True = Delete the player changes
+        //   False = Save the player changes
         public override bool NoPlayerSaving => false;
 
         public override List<GenPass> Tasks => new List<GenPass>()
